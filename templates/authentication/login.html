@@ -16,10 +16,11 @@
                     <div class="card-body p-0">
                         <!-- Nested Row within Card Body -->
                         <div class="row">
+                            {% comment %} <div class="col-lg-6 d-none d-lg-block"></div> {% endcomment %}
                             <div class="col-lg-6">
                                 <div class="p-5">
                                     <div class="text-center">
-                                        <h1 class="h4 text-gray-900 mb-4">Welcome Back!</h1>
+                                        <h1 class="h4 text-gray-900 mb-4">Bienvenue!</h1>
                                     </div>
                                     <form action="{% url 'login' %}" class="user" method="post">
                                         {% csrf_token %}
@@ -27,13 +28,13 @@
                                         <div class="form-group">
                                             <input name="username" type="text" class="form-control form-control-user"
                                                 id="usernameField"
-                                                placeholder="Username">
+                                                placeholder="Nom d'utilisateur">
                                         </div>
                                         <div class="form-group">
                                             <input name="password" type="password" class="form-control form-control-user"
-                                                id="passwordField" placeholder="Password">
+                                                id="passwordField" placeholder="Mot de passe">
                                         </div>
-                                        <input type="submit" class="btn btn-primary btn-user btn-block submit-btn" value="Login"/>
+                                        <input type="submit" class="btn btn-primary btn-user btn-block submit-btn" value="Connecter"/>
                                         {% comment %} <hr>
                                         <a href="index.html" class="btn btn-google btn-user btn-block">
                                             <i class="fab fa-google fa-fw"></i> Login with Google
@@ -44,10 +45,10 @@
                                     </form>
                                     <hr>
                                     <div class="text-center">
-                                        <a class="small" href="{% url 'request-reset-link' %}">Forgot Password?</a>
+                                        <a class="small" href="{% url 'request-reset-link' %}">Mot de passe oublié?</a>
                                     </div>
                                     <div class="text-center">
-                                        <a class="small" href="{% url 'register' %}">Create an Account!</a>
+                                        <a class="small" href="{% url 'register' %}">Créer un nouveau compte !</a>
                                     </div>
                                 </div>
                             </div>

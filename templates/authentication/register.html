@@ -11,11 +11,11 @@
             <div class="card-body p-0">
                 <!-- Nested Row within Card Body -->
                 <div class="row">
-                    <div class="col-lg-5 d-none d-lg-block"></div>
-                    <div class="col-lg-7">
+                    {% comment %} <div class="col-lg-6 d-none d-lg-block"></div> {% endcomment %}
+                    <div class="col-lg-6">
                         <div class="p-5">
                             <div class="text-center">
-                                <h1 class="h4 text-gray-900 mb-4">Create an Account!</h1>
+                                <h1 class="h4 text-gray-900 mb-4">Créer un compte!</h1>
                             </div>
                             <form action="{% url 'register' %}" class="user" method="post">
                                 {% csrf_token %}
@@ -23,14 +23,14 @@
                                 <div class="form-group">
                                     
                                         <input name="username" type="text" class="form-control form-control-user" id="usernameField"
-                                            placeholder="Username">
+                                            placeholder="Nom d'utilisateur">
                                         <div class="invalid-username invalid-feedback mx-2" style="display:none;"></div>
                                         <p class="text-sm text-success username-success mx-2 p-0"></p>
                                     
                                 </div>
                                 <div class="form-group">
                                     <input name="email" type="email" class="form-control form-control-user" id="emailField"
-                                        placeholder="Email Address">
+                                        placeholder="Adresse Email">
                                         <div class="invalid-email invalid-feedback mx-2" style="display:none;">
                                         </div>
                                         <p class="text-sm text-success email-success mx-2 p-0"></p>
@@ -38,10 +38,10 @@
                                 <div class="form-group">
                                     
                                         <input name="password" type="password" class="form-control form-control-user"
-                                            id="passwordField" placeholder="Password">
+                                            id="passwordField" placeholder="Mot de passe">
                                     
                                 </div>
-                                <input type="submit" class="btn btn-primary btn-user btn-block submit-btn" value="Register"/>
+                                <input type="submit" class="btn btn-primary btn-user btn-block submit-btn" value="S'inscrire"/>
                                 {% comment %} <hr>
                                 <a href="index.html" class="btn btn-google btn-user btn-block">
                                     <i class="fab fa-google fa-fw"></i> Register with Google
@@ -52,7 +52,7 @@
                             </form>
                             <hr>
                             <div class="text-center">
-                                <a class="small" href="{% url 'login' %}">Already have an account? Login!</a>
+                                <a class="small" href="{% url 'login' %}">Vous avez déjà un compte? Veuillez connecter!</a>
                             </div>
                         </div>
                     </div>
