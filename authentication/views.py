@@ -43,6 +43,8 @@ class EmailValidationView(View):
 
 class RegistrationView(View):
     def get(self, request):
+        if request.user:
+            return redirect('home')
         return render(request, 'authentication/register.html')
 
     def post(self, request):
@@ -112,6 +114,8 @@ class VerificationView(View):
 
 class LoginView(View):
     def get(self, request):
+        if request.user:
+            return redirect('home')
         return render(request,'authentication/login.html')
     def post(self, request):
         username = request.POST['username']
@@ -138,6 +142,8 @@ class LogoutView(View):
 
 class RequestPasswordView(View):
     def get(self, request):
+        if request.user:
+            return redirect('home')
         return render(request,'authentication/reset-password.html')
     def post(self, request):
         email = request.POST['email']
@@ -183,8 +189,7 @@ class CompletePasswordreset(View):
             if not PasswordResetTokenGenerator().check_token(user, token):
                 messages.info(request,'Le lien de réinitialisation du mot de passe n`est pas valide, veuillez en demander un nouveau')
                 return render(request,'authentication/reset-password.html')
-            messages.success(request,'Réinitialisation du mot de passe avec succès !!')
-            return redirect('login')
+            return render(request,'authentication/set-new-password.html',context)    
         except Exception as identifier:
             pass
         return render(request,'authentication/set-new-password.html',context)
