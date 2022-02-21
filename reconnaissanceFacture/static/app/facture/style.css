@@ -10,11 +10,16 @@
   color: #fff;
   background: #6990F2;
 }
+.wrapper:hover{
+  background: #f4ebff4d;
+}
 .wrapper{
   width: 430px;
+  margin:auto;
+  margin-bottom: 50px;
   background: #fff;
   border-radius: 5px;
-  padding: 30px;
+  padding: 1px;
   box-shadow: 7px 7px 12px rgba(0,0,0,0.05);
 }
 .wrapper header{
@@ -27,7 +32,7 @@
   height: 167px;
   display: flex;
   cursor: pointer;
-  margin: 30px 0;
+  margin: 5px;
   align-items: center;
   justify-content: center;
   flex-direction: column;

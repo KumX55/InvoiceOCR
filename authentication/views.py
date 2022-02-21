@@ -43,10 +43,7 @@ class EmailValidationView(View):
 
 class RegistrationView(View):
     def get(self, request):
-        if request.user:
-            return redirect('home')
         return render(request, 'authentication/register.html')
-
     def post(self, request):
         #GET USER DATA
         #Validate
@@ -114,8 +111,6 @@ class VerificationView(View):
 
 class LoginView(View):
     def get(self, request):
-        if request.user:
-            return redirect('home')
         return render(request,'authentication/login.html')
     def post(self, request):
         username = request.POST['username']
@@ -142,8 +137,6 @@ class LogoutView(View):
 
 class RequestPasswordView(View):
     def get(self, request):
-        if request.user:
-            return redirect('home')
         return render(request,'authentication/reset-password.html')
     def post(self, request):
         email = request.POST['email']

@@ -1,63 +1,65 @@
 {% extends 'appbase.html' %}
 {% block content %}
 {% load static %}
-
 <head>
   <title> {% block title %} Upload {% endblock %} </title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
   <link rel="stylesheet" href="{% static 'app/facture/style.css'%}">
-  {% comment %} <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous"> {% endcomment %}
   <link href='https://fonts.googleapis.com/css?family=Roboto:400,100,300,700' rel='stylesheet' type='text/css'>
-  {% comment %} <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">  
-  <link rel="stylesheet" href="{% static 'app/facture/css/style.css'%}">
-  
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/> {% endcomment %}
   <style>
   .titi:hover {
-    background: #ffffff;
+    background: #f4ebff75;
+    color: black;
     } 
   </style>
 </head>
-        <div class="container mt-4">
-          <form action="" class="pb-3">
-            <input type="text" class="form-control" id="searchField" placeholder="Search">
-          </form>
-            {% if factures.count %}
-               <div class="factures-table">
-                <table class="table table-responsive-xl">
-                  <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Date</th>
-                        <th></th>
-                    </tr>
+      <div class="container mt-4">
+        <form action="" class="pb-3 w-100">
+          <input type="text" class="form-control" id="searchField" placeholder="Search">
+        </form>
+          {% if factures.count %}
+            <div class="factures-table">
+              <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Les Factures</h6>
+                </div>
+                <div class="card-body">
+              <table class="table table-responsive-xl">
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Date</th>
+                    <th></th>
+                  </tr>
                   </thead>
                   <tbody>
                   {% for f in page_obj %} 
-                    <tr class="alert titi clickable-row" role="alert" style="cursor: pointer;" data-href='{{f.files.url}}'>
+                    <tr class="alert titi clickable-row" role="alert" style="cursor: pointer;" data-href='http://127.0.0.1:8000/app{{f.files.url}}'>
                       <td>{{f.name}}</td>
                       <td>{{f.date}}</td>
-                      <td><svg width="16"  height="16" fill="currentColor" class="bi bi-arrow-right-square" viewBox="0 0 16 16">
-                        <path fill-rule="evenodd" d="M15 2a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2zM0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2zm4.5 5.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5H4.5z"/>
-                      </svg></td>
+                      <td><a href="#" class="btn btn-light btn-icon-split">
+                        <span class="icon text-gray-50">
+                            <i class="fas fa-arrow-right"></i>
+                        </span>
+                    </a></td>
                     </tr>
                   {% endfor %}
                   </tbody>
                 </table>
                 <div class="pagination-container">
                   <div class="">
-                      Showing page {{page_obj.number}} of {{page_obj.paginator.num_pages}}
+                    Page {{page_obj.number}} sur {{page_obj.paginator.num_pages}}
                   </div>
                   <ul class="pagination align-right float-right mr-auto">
                     {% if page_obj.has_previous %}
                       <li {% if page_obj.number == 1 %} class="page-item active" {% endif %}><a class="page-link" href="?page=1">&laquo; 1</a></li>
-                      <li class="page-item"> <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a></li>
+                      <li class="page-item"> <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Pécédent</a></li>
                       {% endif %}
                 
                       {% if page_obj.has_next %}
-                      <li class="page-item"> <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a></li>
+                      <li class="page-item"> <a class="page-link" href="?page={{ page_obj.next_page_number }}">Suivant</a></li>
                       <li class="page-item"> <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">{{ page_obj.paginator.num_pages}} &raquo;</a></li>
                       {% endif %}
                       </ul>
@@ -65,12 +67,23 @@
               </div>
               </div> 
             </div>
+          </div>
+        </div>
+{% for f in page_obj %} 
+        <div class="container">
+          <iframe src="https://docs.google.com/gview?url=http://localhost:8000/app/media/ext_mod_A.pdf&embedded=true" style="width:400px;height:400px" frameborder="0"></iframe>
+      </div>
+      {% endfor %}
             <div class="container">
                 <p class="no-results" style="display: none;">No results found</p>
             </div>
-
               <div class="container">
                 <div class="table-output">
+                  <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">Les Résultats</h6>
+                    </div>
+                    <div class="card-body">
                   <table class="table table-responsive-xl">
                     <thead>
                       <tr>
@@ -79,13 +92,14 @@
                       </tr>
                     </thead>
                     <tbody class="table-body">
-  
+
                     </tbody>
                   </table>
                   <div class="pagination-container">
                     <div class="">
-                        Showing page {{page_obj.number}} of {{page_obj.paginator.num_pages}}
+                      Page {{page_obj.number}} sur {{page_obj.paginator.num_pages}}
                     </div>
+                    
                     <ul class="pagination align-right float-right mr-auto">
                         {% if page_obj.has_previous %}
                         <li {% if page_obj.number == 1 %} class="page-item active" {% endif %}><a class="page-link" href="?page=1">&laquo; 1</a></li>
@@ -100,23 +114,11 @@
                 </div>
                 </div>
               </div>
-            
-              
-              
-
-
-
-
-<div class="container"><div class="container">
-<div class="container"><div class="container">
-<div class="container"><div class="container">
-<div class="container"><div class="container">
-<div class="container"><div class="container">
-<div class="container"><div class="container">
-<div class="container"><div class="container">
-<div class="container">
+            </div>
+          </div>
+          <div class="container">
             <div class="wrapper mt-5">
-                <form action="{% url 'home'%}" class="form-group mt-5 upload-form" method="POST" style="cursor: pointer;" enctype="multipart/form-data">
+                <form action="{% url 'home'%}" class="form-group upload-form" method="POST" style="cursor: pointer;" enctype="multipart/form-data">
                   <input class="file-input" type="file" name="factures" multiple hidden/>
                   <img class="jss301" src="https://cdn.nanonets.com/media/invoice.svg" alt="">
                   <p>télécharger votre facture</p>
@@ -126,23 +128,7 @@
                 <section class="uploaded-area"></section>
             </div>
             </div>
-        </div>
-</div></div>
-</div></div>
-</div></div>
-</div></div>
-</div></div>
-</div></div>
-</div></div>
-
-
-
-
-
-{% comment %} <script src="{% static 'app/facture/js/jquery.min.js'%}"></script>
-<script src="{% static 'app/facture/js/popper.js'%}"></script>
-<script src="{% static 'app/facture/js/bootstrap.min.js'%}"></script>
-<script src="{% static 'app/facture/js/main.js'%}"></script> {% endcomment %}
+          </div>
 <script src="{% static 'app/facture/script.js'%}"></script>
 <script src="{% static 'app/facture/searchFac.js'%}"></script>
 <script>
@@ -152,4 +138,5 @@
       });
   });
 </script>
+</html>
 {% endblock %}

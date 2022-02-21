@@ -10,7 +10,7 @@
     <meta name="author" content="">
 
     <title> RecFac - {% block title %}{% endblock %}</title>
-    <link href="{% static 'img/invoice.svg'%}" rel="icon">
+    <link href="{% static 'home/img/invoice.svg'%}" rel="icon">
 
     <!-- Custom fonts for this template-->
     <link href="{%static 'app/vendor/fontawesome-free/css/all.min.css'%}" rel="stylesheet" type="text/css">
@@ -73,7 +73,7 @@
                                 <form class="form-inline mr-auto w-100 navbar-search">
                                     <div class="input-group">
                                         <input type="text" class="form-control bg-light border-0 small"
-                                            placeholder="Search for..." aria-label="Search"
+                                            placeholder="Search for..." aria-label="Search" 
                                             aria-describedby="basic-addon2">
                                         <div class="input-group-append">
                                             <button class="btn btn-primary" type="button">
@@ -210,7 +210,7 @@
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <span class="mr-2 d-none d-lg-inline text-gray-600 small">{{request.user.username}}</span>
                                 <img class="img-profile rounded-circle"
-                                    src="{% static 'img/login.jpg'%}">
+                                    src="{% static 'home/img/login.jpg'%}">
                             </a>
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
@@ -251,13 +251,13 @@
                 <!-- End of Main -->
 
             <!-- Footer -->
-            <footer class="sticky-footer bg-white">
+            {% comment %} <footer class="sticky-footer bg-white">
                 <div class="container my-auto">
                     <div class="copyright text-center my-auto">
-                        <span>Copyright &copy; RecFac 2021</span>
+                        <span>Copyright &copy; RecFac 2022</span>
                     </div>
                 </div>
-            </footer>
+            </footer> {% endcomment %}
             <!-- End of Footer -->
 
         </div>
@@ -304,11 +304,7 @@
     <script src="{%static 'app/js/sb-admin-2.min.js'%}"></script>
 
     <!-- Page level plugins -->
-    <script src="{%static 'app/vendor/chart.js/Chart.min.js'%}"></script>
 
-    <!-- Page level custom scripts -->
-    <script src="{%static 'app/js/demo/chart-area-demo.js'%}"></script>
-    <script src="{%static 'app/js/demo/chart-pie-demo.js'%}"></script>
 
 </body>
 

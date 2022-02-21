@@ -30,7 +30,7 @@ def upload(request):
         for f in factures:
             Facture.objects.create(files=f,name=f.name,owner=request.user)
     factures = Facture.objects.filter(owner=request.user)
-    paginator = Paginator(factures,1)
+    paginator = Paginator(factures,4)
     page_number = request.GET.get('page')
     page_obj = Paginator.get_page(paginator,page_number)
     return render(request,'facture/upload.html',{'factures':factures, 'page_obj': page_obj})
