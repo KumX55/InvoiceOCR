@@ -1,3 +1,77 @@
-<div class="container">
-    <iframe src="https://docs.google.com/gview?url=http://127.0.0.1:8000/app{{f.files.url}}&embedded=true" style="width:400px;height:400px" frameborder="0"></iframe>
+{% extends 'appbase.html' %}
+{% load static %}
+{% block content %}
+<title> {% block title %} Show {% endblock %} </title>
+<!-- Begin Page Content -->
+<div class="container-fluid">
+
+  <!-- Page Heading -->
+  <h1 class="h3 mb-4 text-gray-800">Facture</h1>
+
+
+<div class="row">
+  <div class="col-lg-6">
+    <!-- Circle Buttons -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">0002588.pdf</h6>
+        </div>
+        <div class="card-body">
+            <object
+              data="http://127.0.0.1:8000/app/media/ext_mod_A.pdf"
+              type="application/pdf"
+              width="500"
+              height="673"
+            >
+      
+              <iframe
+                src="http://127.0.0.1:8000/app/media/ext_mod_A.pdf"
+                width="500"
+                height="673"
+              >
+              </iframe>
+            </object>
+        </div>
+    </div>
+
+
 </div>
+
+<div class="col-lg-6">
+  <div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Extracter comme :</h6>
+    </div>
+    <div class="card-body">
+      <a href="" class="btn btn-primary">PDF</a>
+      <a href="" class="btn btn-success">EXCEL</a>
+      <a href="" class="btn btn-warning">CSV</a>
+    </div>
+</div>
+    <div class="card shadow">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Champs</h6>
+        </div>
+        <div class="card-body">
+          <form action="" class="form-group py-3 mb-3 ">
+            <p>Adresse : <input type="text" class="form-control"></p>
+            <p>Email : <input type="text" class="form-control"></p>
+            <p>Vendeur : <input type="text" class="form-control"></p>
+            <p>Acheteur : <input type="text" class="form-control"></p>
+            <p>Montant : <input type="text" class="form-control"></p>
+            <p>Taxe : <input type="text" class="form-control"></p>
+          </form>
+        </div>
+    </div>
+</div>
+</div>
+
+  </div>
+
+</div>
+<!-- /.container-fluid -->
+
+</div>
+</div>
+<!-- End of Main Content -->
+{% endblock %}

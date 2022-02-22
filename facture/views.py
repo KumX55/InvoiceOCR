@@ -34,3 +34,8 @@ def upload(request):
     page_number = request.GET.get('page')
     page_obj = Paginator.get_page(paginator,page_number)
     return render(request,'facture/upload.html',{'factures':factures, 'page_obj': page_obj})
+
+def show(request):
+    response =  render(request,'facture/show.html')
+    response['Content-Security-Policy'] = "frame-ancestors 'self'"
+    return response

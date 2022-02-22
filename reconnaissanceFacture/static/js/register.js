@@ -7,31 +7,34 @@ const usernameSuccess = document.querySelector('.username-success')
 const submitBtn = document.querySelector('.submit-btn')
 
 
-emailField.addEventListener('keyup', (e) => {
-  console.log('77777',77777)
-  const emailVal= e.target.value
-  emailField.classList.remove('is-invalid')
-  invalidEmail.style.display = "none";
-
-
-  if (emailVal.length > 0) {
-      fetch("/authentication/validate-email", {
-        body: JSON.stringify({ email: emailVal }),
-        method: "POST",
-      })
-        .then((res) => res.json())
-        .then((data) => {
-     console.log('data', data)
-     if(data.email_error)
-     {
-      submitBtn.disabled=true
-      emailField.classList.add('is-invalid')
-      invalidEmail.style.display = "block";
-      invalidEmail.innerHTML= `<p>${data.email_error}</p>`
-     } else{submitBtn.removeAttribute("disabled")}
+if(emailField)
+{
+  emailField.addEventListener('keyup', (e) => {
+    console.log('77777',77777)
+    const emailVal= e.target.value
+    emailField.classList.remove('is-invalid')
+    invalidEmail.style.display = "none";
+  
+  
+    if (emailVal.length > 0) {
+        fetch("/authentication/validate-email", {
+          body: JSON.stringify({ email: emailVal }),
+          method: "POST",
+        })
+          .then((res) => res.json())
+          .then((data) => {
+       console.log('data', data)
+       if(data.email_error)
+       {
+        submitBtn.disabled=true
+        emailField.classList.add('is-invalid')
+        invalidEmail.style.display = "block";
+        invalidEmail.innerHTML= `<p>${data.email_error}</p>`
+       } else{submitBtn.removeAttribute("disabled")}
+    })
+  }
   })
 }
-})
 
 
 usernameField.addEventListener('keyup', (e) => {

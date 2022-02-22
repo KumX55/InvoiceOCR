@@ -36,7 +36,7 @@
                   </thead>
                   <tbody>
                   {% for f in page_obj %} 
-                    <tr class="alert titi clickable-row" role="alert" style="cursor: pointer;" data-href='http://127.0.0.1:8000/app{{f.files.url}}'>
+                    <tr class="alert titi clickable-row" role="alert" style="cursor: pointer;" data-href="{% url 'show'%}">
                       <td>{{f.name}}</td>
                       <td>{{f.date}}</td>
                       <td><a href="#" class="btn btn-light btn-icon-split">
@@ -69,11 +69,6 @@
             </div>
           </div>
         </div>
-{% for f in page_obj %} 
-        <div class="container">
-          <iframe src="https://docs.google.com/gview?url=http://localhost:8000/app/media/ext_mod_A.pdf&embedded=true" style="width:400px;height:400px" frameborder="0"></iframe>
-      </div>
-      {% endfor %}
             <div class="container">
                 <p class="no-results" style="display: none;">No results found</p>
             </div>
