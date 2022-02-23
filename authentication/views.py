@@ -212,4 +212,31 @@ class CompletePasswordreset(View):
 
 
         # return render(request,'authentication/set-new-password.html',context)
-        
+class ProfileView(View):
+    def get(self, request):
+        u = request.user
+        username = u.username
+        email = u.email
+        return render(request,'authentication/profile.html',{'user':u})
+    def post(self, request):
+        u = request.user
+        username = request.POST['username']
+        email = request.POST['email']
+        password = request.POST['password']
+        confirm = request.POST['confirm']
+        if password != confirm:
+            messages.warning(request,'Vérifiez les champs de mot de passe !!')
+            return redirect('profile')
+        elif password == "":
+            u.username = username
+            u.email = email
+            u.save()
+            messages.success(request,'Compte modifié avec succès !!')
+            return redirect('login')
+        else:
+            u.username = username
+            u.email = email
+            u.set_password(password)
+            u.save()
+            messages.success(request,'Compte modifié avec succès !!')
+            return redirect('login')

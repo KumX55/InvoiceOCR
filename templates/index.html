@@ -48,7 +48,6 @@
 
     </div>
   </header><!-- Fin Section Header -->
-
   <!-- ======= Section Hero  ======= -->
   <section id="hero" class="d-flex align-items-center">
     <div class="position-relative" data-aos="fade-up" data-aos-delay="100">
@@ -298,8 +297,9 @@
           </div>
 
           <div class="col-lg-8 mt-5 mt-lg-0">
-
-            <form action="" method="post" role="form" class="php-email-form">
+            <form action="{% url 'index'%}" role="form" class="php-email-form" method="POST">
+              {% csrf_token %}
+              {% include 'partials/_messages.html' %}
               <div class="row">
                 <div class="col-md-6 form-group">
                   <input type="text" name="name" class="form-control" id="name" placeholder="Votre nom" required>
@@ -312,14 +312,13 @@
                 <input type="text" class="form-control" name="subject" id="subject" placeholder="Sujet" required>
               </div>
               <div class="form-group mt-3">
-                <textarea class="form-control" name="message" rows="5" placeholder="Message" required></textarea>
+                <input type="text" class="form-control" name="message" placeholder="Message" required/>
               </div>
-              <div class="my-3">
-                <div class="loading">Loading</div>
-                <div class="error-message"></div>
-                <div class="sent-message">Your message has been sent. Thank you!</div>
-              </div>
-              <div class="text-center"><button type="submit">Envoyez message</button></div>
+              <input type="submit" class="btn" style="background: #2487ce;
+              padding: 8px 20px;
+              margin: auto;
+              border-radius: 4px;
+              color: #fff;" value="Envoyer message"/>
             </form>
 
           </div>
@@ -405,7 +404,6 @@
   <script src="{%static 'home/vendor/glightbox/js/glightbox.min.js'%}"></script>
   <script src="{%static 'home/vendor/isotope-layout/isotope.pkgd.min.js'%}"></script>
   <script src="{%static 'home/vendor/swiper/swiper-bundle.min.js'%}"></script>
-  <script src="{%static 'home/vendor/php-email-form/validate.js'%}"></script>
   <script src="{%static 'home/js/main.js'%}"></script>
 
 </body>

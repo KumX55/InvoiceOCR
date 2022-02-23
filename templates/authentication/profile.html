@@ -1,0 +1,25 @@
+{% extends 'appbase.html' %}
+{% load static %}
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Profile</h6>
+                </div>
+                <div class="card-body">
+                    <form action="{% url 'profile' %}" method="POST" class="form-group">
+                        {% csrf_token %}
+                        <p>Nom d'utilisateur : <input type="text" class="form-control mt-2" name="username" value="{{ user.username }}"/> </p>
+                        <p>Adresse email :<input type="text" class="form-control mt-2" name="email" value="{{ user.email }}"/> </p>
+                        <p>Mot de passe : <small style="color:green;">facultatif </small><input type="password" class="form-control mt-2" name="password" /> </p>
+                        <p>Confirmer mot de passe : <small style="color:green;"> facultatif</small><input type="password" class="form-control mt-2" name="confirm" /> </p>
+                        <input type="submit" class="btn btn-primary mt-2" value="Enregistrer"/> 
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
