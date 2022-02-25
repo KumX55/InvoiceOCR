@@ -15,63 +15,60 @@
     } 
   </style>
 </head>
-      <div class="container mt-4">
-        <form action="" class="pb-3 w-100">
-          <input type="text" class="form-control" id="searchField" placeholder="Search">
-        </form>
-          {% if factures.count %}
-            <div class="factures-table">
-              <div class="card shadow mb-4">
-                <div class="card-header py-3">
-                    <h6 class="m-0 font-weight-bold text-primary">Les Factures</h6>
-                </div>
-                <div class="card-body">
-              <table class="table table-responsive-xl">
-                <thead>
-                  <tr>
-                    <th>Name</th>
-                    <th>Date</th>
-                    <th></th>
-                  </tr>
-                  </thead>
-                  <tbody>
-                  {% for f in page_obj %} 
-                    <tr class="alert titi clickable-row" role="alert" style="cursor: pointer;" data-href="{% url 'show'%}">
-                      <td>{{f.name}}</td>
-                      <td>{{f.date}}</td>
-                      <td><a href="#" class="btn btn-light btn-icon-split">
-                        <span class="icon text-gray-50">
-                            <i class="fas fa-arrow-right"></i>
-                        </span>
-                    </a></td>
-                    </tr>
-                  {% endfor %}
-                  </tbody>
-                </table>
-                <div class="pagination-container">
-                  <div class="">
-                    Page {{page_obj.number}} sur {{page_obj.paginator.num_pages}}
-                  </div>
-                  <ul class="pagination align-right float-right mr-auto">
-                    {% if page_obj.has_previous %}
-                      <li {% if page_obj.number == 1 %} class="page-item active" {% endif %}><a class="page-link" href="?page=1">&laquo; 1</a></li>
-                      <li class="page-item"> <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Pécédent</a></li>
-                      {% endif %}
-                
-                      {% if page_obj.has_next %}
-                      <li class="page-item"> <a class="page-link" href="?page={{ page_obj.next_page_number }}">Suivant</a></li>
-                      <li class="page-item"> <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">{{ page_obj.paginator.num_pages}} &raquo;</a></li>
-                      {% endif %}
-                      </ul>
-                   {% endif %}
-              </div>
-              </div> 
-            </div>
-          </div>
-        </div>
-            <div class="container">
+<div class="container">
+              {% if factures.count %}
+              <form action="" class="pb-3 w-100">
+                <input type="text" class="form-control" id="searchField" placeholder="Search">
+              </form>
+                <div class="factures-table">
+                  <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">Les Factures</h6>
+                        <a href="#" class="btn btn-danger float-right" data-toggle="modal" data-target="#delfacomModal">Supprimer tous les factures</a>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-responsive-xl">
+                           <thead>
+                              <tr>
+                                <th>Name</th>
+                                <th>Date</th>
+                                <th></th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {% for f in page_obj %} 
+                                <tr class="alert titi clickable-row" role="alert" style="cursor: pointer;" data-href="{% url 'show' f.id %}">
+                                  <td>{{f.name}}</td>
+                                  <td>{{f.date}}</td>
+                                  <td><a href="#" class="btn btn-light btn-icon-split">
+                                    <span class="icon text-gray-50">
+                                        <i class="fas fa-arrow-right"></i>
+                                    </span>
+                                  </a></td>
+                                </tr>
+                              {% endfor %}
+                            </tbody>
+                         </table>
+                          <div class="pagination-container">
+                            <div class="">
+                              Page {{page_obj.number}} sur {{page_obj.paginator.num_pages}}
+                            </div>
+                            <ul class="pagination align-right float-right mr-auto">
+                              {% if page_obj.has_previous %}
+                                <li {% if page_obj.number == 1 %} class="page-item active" {% endif %}><a class="page-link" href="?page=1">&laquo; 1</a></li>
+                                <li class="page-item"> <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Pécédent</a></li>
+                                {% endif %}
+                            
+                                {% if page_obj.has_next %}
+                                <li class="page-item"> <a class="page-link" href="?page={{ page_obj.next_page_number }}">Suivant</a></li>
+                                <li class="page-item"> <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">{{ page_obj.paginator.num_pages}} &raquo;</a></li>
+                              {% endif %}
+                            </ul>
+                          </div>
+               {% endif %}
+              <div class="container">
                 <p class="no-results" style="display: none;">No results found</p>
-            </div>
+              </div>
               <div class="container">
                 <div class="table-output">
                   <div class="card shadow mb-4">
@@ -79,59 +76,78 @@
                         <h6 class="m-0 font-weight-bold text-primary">Les Résultats</h6>
                     </div>
                     <div class="card-body">
-                  <table class="table table-responsive-xl">
-                    <thead>
-                      <tr>
-                          <th>Name</th>
-                          <th>Date</th>
-                      </tr>
-                    </thead>
-                    <tbody class="table-body">
-
-                    </tbody>
-                  </table>
-                  <div class="pagination-container">
-                    <div class="">
-                      Page {{page_obj.number}} sur {{page_obj.paginator.num_pages}}
-                    </div>
-                    
-                    <ul class="pagination align-right float-right mr-auto">
-                        {% if page_obj.has_previous %}
-                        <li {% if page_obj.number == 1 %} class="page-item active" {% endif %}><a class="page-link" href="?page=1">&laquo; 1</a></li>
-                        <li class="page-item"> <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a></li>
-                        {% endif %}
-                  
-                        {% if page_obj.has_next %}
-                        <li class="page-item"> <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a></li>
-                        <li class="page-item"> <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">{{ page_obj.paginator.num_pages}} &raquo;</a></li>
-                        {% endif %}
+                        <table class="table table-responsive-xl">
+                          <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Date</th>
+                            </tr>
+                          </thead>
+                          <tbody class="table-body">
+  
+                          </tbody>
+                        </table>
+                        <div class="pagination-container">
+                        <div class="">
+                          Page {{page_obj.number}} sur {{page_obj.paginator.num_pages}}
+                        </div>
+                        <ul class="pagination align-right float-right mr-auto">
+                            {% if page_obj.has_previous %}
+                            <li {% if page_obj.number == 1 %} class="page-item active" {% endif %}><a class="page-link" href="?page=1">&laquo; 1</a></li>
+                            <li class="page-item"> <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a></li>
+                            {% endif %}
+                        
+                            {% if page_obj.has_next %}
+                            <li class="page-item"> <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a></li>
+                            <li class="page-item"> <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">{{ page_obj.paginator.num_pages}} &raquo;</a></li>
+                            {% endif %}
                         </ul>
+                      </div>
+                    </div>
+                  </div>
                 </div>
+               </div>
+               <div class="container">
+                <div class="wrapper mt-5">
+                    <form action="{% url 'home'%}" class="form-group upload-form" method="POST" style="cursor: pointer;" enctype="multipart/form-data">
+                      <input class="file-input" type="file" name="factures" multiple hidden/>
+                      <img class="jss301" src="https://cdn.nanonets.com/media/invoice.svg" alt="">
+                      <p>télécharger votre facture</p>
+                      <input type="submit" class="btn btn-outline-info" value="upload" hidden/>
+                    </form>
+                    <section class="progress-area"></section>
+                    <section class="uploaded-area"></section>
                 </div>
               </div>
-            </div>
+</div>
+<form action="{% url 'deleteAll'%}" method="post">
+  {% csrf_token %} 
+<div class="modal fade" id="delfacomModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+      <div class="modal-content">
+          <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">Voulez-vous Supprimer toutes les factures?</h5>
+              <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">×</span>
+              </button>
           </div>
-          <div class="container">
-            <div class="wrapper mt-5">
-                <form action="{% url 'home'%}" class="form-group upload-form" method="POST" style="cursor: pointer;" enctype="multipart/form-data">
-                  <input class="file-input" type="file" name="factures" multiple hidden/>
-                  <img class="jss301" src="https://cdn.nanonets.com/media/invoice.svg" alt="">
-                  <p>télécharger votre facture</p>
-                  <input type="submit" class="btn btn-outline-info" value="upload" hidden/>
-                </form>
-                <section class="progress-area"></section>
-                <section class="uploaded-area"></section>
-            </div>
-            </div>
+          <div class="modal-body">Selectionnez "Oui" si vous êtes sure</div>
+          <div class="modal-footer">
+              <button class="btn btn-secondary" type="button" data-dismiss="modal">Annuler</button>
+              <input class="btn btn-danger" type="submit" value="Oui">
           </div>
-<script src="{% static 'app/facture/script.js'%}"></script>
-<script src="{% static 'app/facture/searchFac.js'%}"></script>
-<script>
-    jQuery(document).ready(function($) {
-      $(".clickable-row").click(function() {
-          window.location = $(this).data("href");
-      });
-  });
-</script>
-</html>
+      </div>
+  </div>
+</div>
+</form>
+            <script src="{% static 'app/facture/script.js'%}"></script>
+            <script src="{% static 'app/facture/searchFac.js'%}"></script>
+            <script>
+                jQuery(document).ready(function($) {
+                  $(".clickable-row").click(function() {
+                      window.location = $(this).data("href");
+                  });
+              });
+            </script>
 {% endblock %}

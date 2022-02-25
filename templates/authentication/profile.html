@@ -16,10 +16,36 @@
                         <p>Mot de passe : <small style="color:green;">facultatif </small><input type="password" class="form-control mt-2" name="password" /> </p>
                         <p>Confirmer mot de passe : <small style="color:green;"> facultatif</small><input type="password" class="form-control mt-2" name="confirm" /> </p>
                         <input type="submit" class="btn btn-primary mt-2" value="Enregistrer"/> 
+                        {% comment %} <a href="{% url 'suppcompte'%}" class="btn btn-danger float-right mt-2"> Supprimer compte </a> {% endcomment %}
+                        <a class="btn btn-danger float-right mt-3" href="#" data-toggle="modal" data-target="#delcomModal">
+                            <i class="fas fa-trash"></i>
+                            Supprimer compte
+                        </a>
                     </form>
                 </div>
             </div>
         </div>
     </div>
 </div>
+<form action="{% url 'suppcompte' %}" method="post">
+        {% csrf_token %} 
+    <div class="modal fade" id="delcomModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Voulez-vous Supprimer votre compte?</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">Selectionnez "Oui" si vous êtes sure</div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Annuler</button>
+                    <input class="btn btn-danger" type="submit" value="Oui">
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
 {% endblock %}

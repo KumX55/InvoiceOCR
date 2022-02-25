@@ -240,3 +240,13 @@ class ProfileView(View):
             u.save()
             messages.success(request,'Compte modifié avec succès !!')
             return redirect('login')
+
+class DeleteAccount(View):
+    def get(self, request):
+        messages.success(request,'Compte supprimé !!')
+        return redirect('login')
+    def post(self, request):
+        user = request.user
+        user.delete()
+        messages.success(request,'Compte supprimé !!')
+        return redirect('login')

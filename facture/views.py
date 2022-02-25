@@ -1,6 +1,8 @@
+from email import message
 import imp
 from unicodedata import name
-from django.shortcuts import render
+from django.shortcuts import redirect, render
+from django.contrib import messages
 from .models import Facture
 from datetime import datetime
 from django.utils import timezone
@@ -35,7 +37,16 @@ def upload(request):
     page_obj = Paginator.get_page(paginator,page_number)
     return render(request,'facture/upload.html',{'factures':factures, 'page_obj': page_obj})
 
-def show(request):
-    response =  render(request,'facture/show.html')
-    response['Content-Security-Policy'] = "frame-ancestors 'self'"
-    return response
+def show(request,id):
+    facture = Facture.objects.get(pk=id)
+    return  render(request,'facture/show.html',{'facture':facture})
+def delete(request,id):
+    facture = Facture.objects.get(pk=id)
+    facture.delete()
+    messages.success(request,'Facture supprimée !!')
+    return redirect('home')
+def deleteAll(request):
+    factures = Facture.objects.filter(owner=request.user)
+    factures.delete()
+    messages.success(request,'Factures supprimé !!')
+    return redirect('home')
