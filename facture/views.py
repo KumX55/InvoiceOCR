@@ -3,6 +3,7 @@ import imp
 from unicodedata import name
 from django.shortcuts import redirect, render
 from django.contrib import messages
+from numpy import NaN
 from .models import Facture
 from datetime import datetime
 from django.utils import timezone
@@ -19,10 +20,10 @@ from django.contrib.auth.decorators import login_required
 def search_factures(request):
     if request.method == 'POST':
         search_str = json.loads(request.body).get('searchText')
-        incomes = Facture.objects.filter(files__icontains=search_str,owner=request.user) | Facture.objects.filter(
+        factures = Facture.objects.filter(files__icontains=search_str,owner=request.user) | Facture.objects.filter(
                                           date__icontains=search_str,owner=request.user) | Facture.objects.filter(
                                           name__icontains=search_str,owner=request.user)
-        data = incomes.values()
+        data = factures.values()
         return JsonResponse(list(data),safe=False)
 
 @login_required(login_url='/authentication/login')

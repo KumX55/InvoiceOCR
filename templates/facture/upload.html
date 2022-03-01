@@ -15,10 +15,11 @@
     } 
   </style>
 </head>
+<!--Upload Content-->
 <div class="container">
-              {% if factures.count %}
+            {% if factures.count %}
               <form action="" class="pb-3 w-100">
-                <input type="text" class="form-control" id="searchField" placeholder="Search">
+                <input type="text" class="form-control" id="searchField" placeholder="Search"/>
               </form>
                 <div class="factures-table">
                   <div class="card shadow mb-4">
@@ -65,7 +66,10 @@
                               {% endif %}
                             </ul>
                           </div>
-               {% endif %}
+                        </div>
+                      </div>
+                    </div>
+            {% endif %}
               <div class="container">
                 <p class="no-results" style="display: none;">No results found</p>
               </div>
@@ -74,6 +78,7 @@
                   <div class="card shadow mb-4">
                     <div class="card-header py-3">
                         <h6 class="m-0 font-weight-bold text-primary">Les Résultats</h6>
+                        <a href="#" class="btn btn-danger float-right" data-toggle="modal" data-target="#delfacomModal">Supprimer tous les factures</a>
                     </div>
                     <div class="card-body">
                         <table class="table table-responsive-xl">
@@ -141,13 +146,14 @@
   </div>
 </div>
 </form>
-            <script src="{% static 'app/facture/script.js'%}"></script>
-            <script src="{% static 'app/facture/searchFac.js'%}"></script>
-            <script>
-                jQuery(document).ready(function($) {
-                  $(".clickable-row").click(function() {
-                      window.location = $(this).data("href");
-                  });
-              });
-            </script>
+<!--Scripts-->
+<script src="{% static 'app/facture/script.js'%}"></script>
+<script src="{% static 'app/facture/searchFac.js'%}"></script>
+<script>
+    jQuery(document).ready(function($) {
+      $(".clickable-row").click(function() {
+          window.location = $(this).data("href");
+      });
+  });
+</script>
 {% endblock %}

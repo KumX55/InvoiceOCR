@@ -28,8 +28,8 @@ searchField.addEventListener('keyup',(e) => {
             } else {
                 noResults.style.display = "none"
                 data.forEach(item=> {
-                    tBody.innerHTML += ` 
-                    <tr> 
+                    tBody.innerHTML += 
+                    `<tr> 
                      <td>${item.name}</td>
                      <td>${item.date}</td>
                     </tr>`
