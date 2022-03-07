@@ -32,7 +32,7 @@ def upload(request):
         factures = request.FILES.getlist('factures')
         for f in factures:
             Facture.objects.create(files=f,name=f.name,owner=request.user)
-    factures = Facture.objects.filter(owner=request.user)
+    factures = Facture.objects.filter(owner=request.user,creation_date=datetime.now().date())
     paginator = Paginator(factures,4)
     page_number = request.GET.get('page')
     page_obj = Paginator.get_page(paginator,page_number)

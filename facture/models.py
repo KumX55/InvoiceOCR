@@ -8,13 +8,45 @@ from django.contrib.auth.models import User
 # Create your models here.
 
 class Facture(models.Model):
+    FACTURE_STATUS = (
+        ('P', 'Payée'),
+        ('N', 'Non-Payée'),
+        ('A', 'Avance Donnée'),
+    )
     files = models.FileField()
-    date = models.DateField(default=now)
-    name = models.CharField(max_length=255,default='')
+    creation_date = models.DateField(default=now)
+    name = models.CharField(max_length=255,null=True)
     owner = models.ForeignKey(to=User, on_delete=models.CASCADE)
-    # owner = models.ForeignKey(to=User, on_delete=models.CASCADE)
+    ref_fac = models.CharField(max_length=255, null=True)
+    date = models.CharField(max_length=255, null=True)
+    tva = models.CharField(max_length=255, null=True)
+    total = models.CharField(max_length=255, null=True)
+    status = models.CharField(max_length=1, null=True, choices=FACTURE_STATUS)
 
-    
+
+
+class Fournisseur(models.Model):
+    name = models.CharField(max_length=255, null=True)
+    adress = models.CharField(max_length=255, null=True)
+    email = models.CharField(max_length=255, null=True)
+    phone = models.CharField(max_length=255, null=True)
+    facture = models.ForeignKey(to=Facture,on_delete=models.CASCADE)
+    owner = models.ForeignKey(to=User, on_delete=models.CASCADE)
+
+class Client(models.Model):
+    name = models.CharField(max_length=255, null=True)
+    adress = models.CharField(max_length=255, null=True)
+    email = models.CharField(max_length=255, null=True)
+    phone = models.CharField(max_length=255, null=True)
+    facture = models.ForeignKey(to=Facture,on_delete=models.CASCADE)
+    owner = models.ForeignKey(to=User, on_delete=models.CASCADE)
+
+class Produit(models.Model):
+    name = models.CharField(max_length=255, null=True)
+    price = models.IntegerField()
+    facture = models.ForeignKey(to=Facture,on_delete=models.CASCADE)
+    owner = models.ForeignKey(to=User, on_delete=models.CASCADE)
+
 #     class Meta:
 #         ordering = ['-date']
 
