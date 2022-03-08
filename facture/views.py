@@ -3,6 +3,7 @@ import imp
 from unicodedata import name
 from django.shortcuts import redirect, render
 from django.contrib import messages
+from django.views import View
 from numpy import NaN
 from .models import Facture
 from datetime import datetime
@@ -51,3 +52,36 @@ def deleteAll(request):
     factures.delete()
     messages.success(request,'Factures supprimé !!')
     return redirect('home')
+def deleteToday(request):
+    factures = Facture.objects.filter(owner=request.user,creation_date=datetime.now().date())
+    factures.delete()
+    messages.success(request,'Factures supprimé !!')
+    return redirect('home')
+
+def history(request):
+    factures = Facture.objects.filter(owner=request.user)
+    paginator = Paginator(factures,8)
+    page_number = request.GET.get('page')
+    page_obj = Paginator.get_page(paginator,page_number)
+    return render(request,'facture/tous.html',{'factures':factures, 'page_obj': page_obj})
+
+class editFac(View):
+    def get(self, request, id):
+        facture = Facture.objects.get(pk=id)
+        return render(request,'facture/edit.html',{'facture':facture})
+    def post(self, request, id):
+        file = request.FILES.getlist('facture')
+        name = request.POST['name']
+        facture = Facture.objects.get(pk=id)
+
+        try:
+            facture.files = file[0]
+            facture.name = name
+            facture.save()
+            messages.success(request,'Facture Modifiée avec succès !!')
+            return redirect('edit',id) 
+        except Exception as identifier:
+            facture.name = name
+            facture.save()
+            messages.success(request,'Facture Modifié avec succès !!')
+            return redirect('edit',id) 

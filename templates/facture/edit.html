@@ -1,4 +1,25 @@
 {% extends 'appbase.html' %}
 {% load static %}
 {% block content %}
+<head>
+    <title> {% block title %} Modifier {% endblock %} </title>
+</head>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-6">
+<div class="card shadow">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Modifier Facture</h6>
+    </div>
+    <div class="card-body">
+      <form action="{% url 'edit' facture.id %}" class="form-group py-3 mb-3" method="post" enctype="multipart/form-data">
+        <p>File : <small style="color:green;">facultatif </small> <input type="file" class="form-control" name="facture"  value="{{ facture.files }}" multiple/></p>
+        <p>Name : <small style="color:green;">facultatif </small> <input type="text" class="form-control" name="name" value="{{ facture.name }}"/></p>
+        <input class="btn btn-primary" type="submit" value="Enregistrer"/>
+      </form>
+    </div>
+</div>
+</div>
+</div>
+</div>
 {% endblock %}
