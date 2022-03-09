@@ -1,4 +1,54 @@
 {% extends 'appbase.html' %}
 {% load static %}
 {% block content %}
+<head>
+   <title> {% block title %}Modifier Fournisseur{% endblock %} </title>
+</head>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Modifier Fournisseur</h6>
+                </div>
+                <div class="card-body">
+                    <form action="" method="POST" class="form-group">
+                        {% csrf_token %}
+                        <p>Nom : <input type="text" class="form-control mt-2" name="username"/> </p>
+                        <p>Addresse :<input type="text" class="form-control mt-2" name="addresse" /> </p>
+                        <p>Email : <input type="text" class="form-control mt-2" name="email"/> </p>
+                        <p>Tel :<input type="text" class="form-control mt-2" name="tel" /> </p>
+                        <input type="submit" class="btn btn-primary mt-2" value="Enregistrer"/> 
+                        {% comment %} <a href="{% url 'suppcompte'%}" class="btn btn-danger float-right mt-2"> Supprimer compte </a> {% endcomment %}
+                        <a class="btn btn-danger float-right mt-3" href="#" data-toggle="modal" data-target="#delcomModal">
+                            <i class="fas fa-trash"></i>
+                            Supprimer Fournisseur
+                        </a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<form action="" method="post">
+        {% csrf_token %} 
+    <div class="modal fade" id="delcomModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Voulez-vous Supprimer votre compte?</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">Selectionnez "Oui" si vous êtes sure</div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Annuler</button>
+                    <input class="btn btn-danger" type="submit" value="Oui">
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
 {% endblock %}

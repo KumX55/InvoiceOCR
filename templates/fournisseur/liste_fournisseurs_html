@@ -1,4 +1,0 @@
-{% extends 'appbase.html' %}
-{% load static %}
-{% block content %}
-{% endblock %}

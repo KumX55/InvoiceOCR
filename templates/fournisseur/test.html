@@ -22,7 +22,7 @@
             </a>
             <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
                 aria-labelledby="dropdownMenuLink">
-                <a class="dropdown-item" href="{% url 'editfourni'%}">Modifier Fournisseur</a>
+                <a class="dropdown-item" href="#">Modifier Fournisseur</a>
                 <a class="dropdown-item" href="#" data-toggle="modal" data-target="#delcomModal">Supprimer Fournisseur</a>
             </div>
               </div>
@@ -47,79 +47,30 @@
             </div>
         </div>
     </div>
-    <div class="card shadow mb-4">
-            <div class="card-header py-3">
-        <h6 class="m-0 font-weight-bold text-primary">Contactez :</h6>
-    </div>
-    <div class="card-body">
-    <div class="row">
-        <div class="col">
-            <form class="form-group" action="">
-                <input type="text" class="form-control mt-2" name="subject" placeholder="sujet"/>
-                <input type="text" class="form-control mt-2" name="message" placeholder="message"/>
-                <input type="text" class="form-control mt-2" name="coord" placeholder="Vos coordonnées"/>
-                <input type="submit" class="btn btn-primary mt-2" value="Envoyez"/>
-            </form>
-        </div>
-    </div>
-    </div>
-    </div>
 </div>
-<div class="col lg-6">
-    <div class="card shadow mb-4">
-        <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">Les Factures</h6>
-            <a href="#" class="btn btn-danger float-right" data-toggle="modal" data-target="#delfacomModal">Supprimer les factures de ce fournisseur</a>
+</div>
+</div>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Contactez :</h6>
         </div>
         <div class="card-body">
-            <table class="table table-responsive-xl">
-               <thead>
-                  <tr>
-                    <th>Name</th>
-                    <th>Date</th> 
-                    <th></th>
-                  </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Lorem ipsum dolor sit</td>
-                        <td>Lorem ipsum dolor sit</td>
-                        <td>Lorem ipsum dolor sit</td>
-                    </tr>
-                    <tr>
-                        <td>Lorem ipsum dolor sit</td>
-                        <td>Lorem ipsum dolor sit</td>
-                        <td>Lorem ipsum dolor sit</td>
-                    </tr>
-                    <tr>
-                        <td>Lorem ipsum dolor sit</td>
-                        <td>Lorem ipsum dolor sit</td>
-                        <td>Lorem ipsum dolor sit</td>
-                    </tr>
-                    <tr>
-                        <td>Lorem ipsum dolor sit</td>
-                        <td>Lorem ipsum dolor sit</td>
-                        <td>Lorem ipsum dolor sit</td>
-                    </tr>
-                    <tr>
-                        <td>Lorem ipsum dolor sit</td>
-                        <td>Lorem ipsum dolor sit</td>
-                        <td>Lorem ipsum dolor sit</td>
-                    </tr>
-                    <tr>
-                        <td>Lorem ipsum dolor sit</td>
-                        <td>Lorem ipsum dolor sit</td>
-                        <td>Lorem ipsum dolor sit</td>
-                    </tr>
-                    <tr>
-                        <td>Lorem ipsum dolor sit</td>
-                        <td>Lorem ipsum dolor sit</td>
-                        <td>Lorem ipsum dolor sit</td>
-                    </tr>
-                </tbody>
-             </table>
-          </div>
-      </div>
+        <div class="row">
+            <div class="col">
+                <form class="form-group" action="">
+                    <input type="text" class="form-control mt-2" name="subject" placeholder="sujet"/>
+                    <input type="text" class="form-control mt-2" name="message" placeholder="message"/>
+                    <input type="text" class="form-control mt-2" name="coord" placeholder="Vos coordonnées"/>
+                    <input type="submit" class="btn btn-primary mt-2" value="Envoyez"/>
+                </form>
+            </div>
+        </div>
+        </div>
+    </div>
+</div>
 </div>
 </div>
 {% endblock %}

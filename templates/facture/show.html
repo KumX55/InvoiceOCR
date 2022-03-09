@@ -26,12 +26,12 @@
                 data="http://127.0.0.1:8000/app/media/ext_mod_A.pdf"
                 type="application/pdf"
                 width="500"
-                height="673"
+                height="680"
               >
                 <iframe
                   src="http://127.0.0.1:8000/app/media/ext_mod_A.pdf"
                   width="500"
-                  height="673"
+                  height="680"
                 >
                 </iframe>
               </object>
@@ -55,12 +55,19 @@
       </div>
       <div class="card-body">
         <form action="" class="form-group py-3 mb-3 ">
-          <p>Adresse : <input type="text" class="form-control"></p>
-          <p>Email : <input type="text" class="form-control"></p>
-          <p>Vendeur : <input type="text" class="form-control"></p>
-          <p>Acheteur : <input type="text" class="form-control"></p>
-          <p>Montant : <input type="text" class="form-control"></p>
-          <p>Taxe : <input type="text" class="form-control"></p>
+          <label>Référence : <input type="text" name="ref_fac" class="form-control"></label>
+          <label>Date : <input type="text" name="date" class="form-control"></label>
+          <label>Tva : <input type="text" name="tva" class="form-control"></label>
+          <label>Total : <input type="text" name="total" class="form-control"></label>
+          <p><label>Produit : <input type="text"  class="form-control" value="Produit" disabled/></label> <label> <button href="#" class="btn btn-info"><i class="fas fa-arrow-right"></i></button></label></p>
+          <p><label>Fournisseur : <input type="text" class="form-control"value="Fournisseur" disabled/></label> <label> <button href="#" class="btn btn-info"><i class="fas fa-arrow-right"></i></button></label></p>
+          <p><label>Client : <input type="text" class="form-control"value="Client" disabled/></label> <label> <button href="#" class="btn btn-info"><i class="fas fa-arrow-right"></i></button></label></p>
+          <select class="form-control" name="status" aria-label="Default select example">
+            <option value="1">Payée</option>
+            <option value="2">Non payée</option>
+            <option value="3">Avance Donnée</option>
+          </select> 
+          <input type="submit" class="btn btn-primary mt-2" value="Sauvegarder"/>
         </form>
       </div>
   </div>

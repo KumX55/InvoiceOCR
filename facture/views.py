@@ -85,3 +85,20 @@ class editFac(View):
             facture.save()
             messages.success(request,'Facture Modifié avec succès !!')
             return redirect('edit',id) 
+
+def listeFournisseurs(request):
+    return render(request,'fournisseur/liste_fournisseurs.html')
+
+def listeClients(request):
+    return render(request,'client/liste_client.html')
+
+def profileFournisseur(request):
+    return render(request,'fournisseur/profile_fournisseur.html')
+
+def profileClient(request):
+    return render(request,'client/profile_client.html')
+
+def editFournisseur(request):
+    return render(request,'fournisseur/edit_fournisseur.html')
+def editClient(request):
+    return render(request,'client/edit_client.html')

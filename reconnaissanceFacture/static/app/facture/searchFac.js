@@ -31,7 +31,7 @@ searchField.addEventListener('keyup',(e) => {
                     tBody.innerHTML += 
                     `<tr> 
                      <td>${item.name}</td>
-                     <td>${item.date}</td>
+                     <td>${item.creation_date}</td>
                     </tr>`
                 })
             }
