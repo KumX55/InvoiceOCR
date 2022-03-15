@@ -5,7 +5,7 @@ from django.shortcuts import redirect, render
 from django.contrib import messages
 from django.views import View
 from numpy import NaN
-from .models import Facture
+from .models import Facture, Fournisseur, Client, Produit
 from datetime import datetime
 from django.utils import timezone
 from django.core.paginator import Paginator
@@ -29,6 +29,17 @@ def search_factures(request):
 
 @login_required(login_url='/authentication/login')
 def upload(request):
+    # if request.method == 'GET':
+    #     f = Fournisseur.objects.create(name="Mytek",adress="03 rue habib bourguiba",email="hello@gmail.com",phone="55445851",owner=request.user)
+    #     f.save()
+    #     c = Client.objects.create(name="Mytek matrix 2",adress="04 rue habib bourguiba",email="byebye@gmail.com",phone="99856321",owner=request.user)
+    #     c.save()
+    #     facture = Facture.objects.create(name="Facture Test",owner=request.user,ref_fac="F-2598-TT8",date="17/07/2000",tva="20%",total="4500TND",status="P",fournisseur=f,client=c)
+    #     facture.save()
+    #     p1 = Produit.objects.create(name="Zephyrus M16",price=6349,facture=facture,owner=request.user)
+    #     p1.save()
+    #     p2 = Produit.objects.create(name="Zephyrus G15",price=8269,facture=facture,owner=request.user)
+    #     p2.save()
     if request.method == 'POST':
         factures = request.FILES.getlist('factures')
         for f in factures:

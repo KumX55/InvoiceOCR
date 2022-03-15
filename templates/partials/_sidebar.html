@@ -34,7 +34,7 @@
         <a class="nav-link collapsed" href="{% url 'home'%}" data-target="#collapseTwo"
             aria-expanded="true" aria-controls="collapseTwo">
             <i class="fas fa-fw fa-cog"></i>
-            <span>Import</span>
+            <span>Facture</span>
         </a>
         <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
@@ -63,25 +63,41 @@
             </div>
         </div>
     </li>
+    <hr class="sidebar-divider">
+
+    <!-- Heading -->
+    <div class="sidebar-heading">
+            Fournisseur
+    </div>
     <li class="nav-item">
         <a class="nav-link collapsed" href="{% url 'fourlist' %}" data-target="#collapsePages"
             aria-expanded="true" aria-controls="collapsePages">
             <i class="fas fa-fw fa-folder"></i>
-            <span>Fournisseurs</span>
+            <span>Liste des Fournisseurs</span>
         </a> </li>
+    <hr class="sidebar-divider">
 
+    <!-- Heading -->
+    <div class="sidebar-heading">
+        Client
+    </div>
     <li class="nav-item">
         <a class="nav-link collapsed" href="{% url 'clilist' %}" data-target="#collapsePages"
             aria-expanded="true" aria-controls="collapsePages">
             <i class="fas fa-fw fa-folder"></i>
-            <span>Clients</span>
+            <span>Liste des Clients</span>
         </a> </li>
+    <hr class="sidebar-divider">
 
+    <!-- Heading -->
+    <div class="sidebar-heading">
+        Produit
+    </div>
     <li class="nav-item">
         <a class="nav-link collapsed" href="{% url 'profile' %}" data-target="#collapsePages"
            aria-expanded="true" aria-controls="collapsePages">
             <i class="fas fa-fw fa-folder"></i>
-            <span>Produits</span>
+            <span>Liste des Produits</span>
         </a> </li>
     <!-- Divider -->
     <hr class="sidebar-divider">
