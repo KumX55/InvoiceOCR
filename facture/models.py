@@ -7,6 +7,7 @@ from django.contrib.auth.models import User
 # from django.contrib.auth.models import User
 # Create your models here.
 
+# **************************************Fournisseur********************************************** #
 class Fournisseur(models.Model):
     creation_date = models.DateField(default=now)
     name = models.CharField(max_length=255, null=True)
@@ -17,6 +18,7 @@ class Fournisseur(models.Model):
     class Meta:
         ordering = ['-creation_date']
 
+# **************************************Client********************************************** #
 class Client(models.Model):
     creation_date = models.DateField(default=now)
     name = models.CharField(max_length=255, null=True)
@@ -27,6 +29,7 @@ class Client(models.Model):
     class Meta:
         ordering = ['-creation_date']
 
+# **************************************Facture********************************************** #
 class Facture(models.Model):
     FACTURE_STATUS = (
         ('P', 'Payée'),
@@ -46,6 +49,7 @@ class Facture(models.Model):
     class Meta:
         ordering = ['-creation_date']
 
+# **************************************Produit********************************************** #
 class Produit(models.Model):
     creation_date = models.DateField(default=now)
     name = models.CharField(max_length=255, null=True)

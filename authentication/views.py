@@ -20,7 +20,7 @@ from django.contrib.sites.shortcuts import get_current_site
 from .utils import token_generator
 
 
-
+# **************************************Validation du nom d'utilisateur********************************************** #
 class UsernameValidationView(View):
     def post(self, request):
         data = json.loads(request.body)
@@ -31,6 +31,7 @@ class UsernameValidationView(View):
             return JsonResponse({'username_error':'Désolé nom d`utilisateur en cours d`utilisation, choisissez-en un autre'},status=409)
         return JsonResponse({'username_valid':True})
 
+# **************************************Validation d'email********************************************** #
 class EmailValidationView(View):
     def post(self, request):
         data = json.loads(request.body)
@@ -41,6 +42,7 @@ class EmailValidationView(View):
             return JsonResponse({'email_error':'Désolé adresse email en cours d`utilisation, choisissez-en un autre'},status=409)
         return JsonResponse({'email_valid':True})
 
+# **************************************Inscription********************************************** #
 class RegistrationView(View):
     def get(self, request):
         return render(request, 'authentication/register.html')
@@ -89,6 +91,7 @@ class RegistrationView(View):
                 return render(request, 'authentication/register.html')
         return render(request, 'authentication/register.html')
 
+# **************************************Vérification du lien d'activation********************************************** #
 class VerificationView(View):
     def get(self ,request, uidb64, token):
         try:
@@ -109,6 +112,7 @@ class VerificationView(View):
         
         return redirect('login')
 
+# **************************************Login********************************************** #
 class LoginView(View):
     def get(self, request):
         return render(request,'authentication/login.html')
@@ -129,12 +133,14 @@ class LoginView(View):
         messages.warning(request,'Veuillez remplir tous les champs!')
         return render(request,'authentication/login.html')
 
+# **************************************Logout********************************************** #
 class LogoutView(View):
     def post(self, request):
         auth.logout(request)
         messages.success(request,'Déconnexion réussie')
         return render(request,'authentication/login.html')
 
+# **************************************Mot de passe Oublié********************************************** #
 class RequestPasswordView(View):
     def get(self, request):
         return render(request,'authentication/reset-password.html')
@@ -170,6 +176,7 @@ class RequestPasswordView(View):
         messages.success(request,'Nous vous avons envoyé un email !!')
         return render(request,'authentication/reset-password.html')
 
+# **************************************Reset Mot de Passe********************************************** #
 class CompletePasswordreset(View):
     def get(self, request, uidb64, token):
         context = {
@@ -212,6 +219,8 @@ class CompletePasswordreset(View):
 
 
         # return render(request,'authentication/set-new-password.html',context)
+
+# **************************************Profile Utilisateur********************************************** #
 class ProfileView(View):
     def get(self, request):
         u = request.user
@@ -241,6 +250,7 @@ class ProfileView(View):
             messages.success(request,'Compte modifié avec succès !!')
             return redirect('login')
 
+# **************************************Supprimer compte utilisateur********************************************** #
 class DeleteAccount(View):
     def get(self, request):
         messages.success(request,'Compte supprimé !!')
