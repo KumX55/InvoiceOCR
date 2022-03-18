@@ -1,7 +1,7 @@
 from os import name
 from django.urls import path
 from . import views
-from .views import editFac
+from .views import editFac, editFournisseur, editClient, createFour , createCli
 from django.conf import settings
 from django.conf.urls.static import static
 from django.views.decorators.csrf import csrf_exempt
@@ -16,10 +16,16 @@ urlpatterns = [
     path('deleteToday',csrf_exempt(views.deleteToday),name="deleteToday"),
     path('liste_fournisseurs',csrf_exempt(views.listeFournisseurs),name="fourlist"),
     path('liste_clients',csrf_exempt(views.listeClients),name="clilist"),
-    path('profile_fournisseur',csrf_exempt(views.profileFournisseur),name="fourprof"),
-    path('profile_client',csrf_exempt(views.profileClient),name="cliprof"),
-    path('modifier_fournisseur',csrf_exempt(views.editFournisseur),name="editfourni"),
-    path('modifier_client',csrf_exempt(views.editClient),name="editclient"),
+    path('créer_fournisseur',csrf_exempt(createFour.as_view()),name="createFour"),
+    path('créer_client',csrf_exempt(createCli.as_view()),name="createCli"),
+    path('profile_fournisseur/<id>',csrf_exempt(views.profileFournisseur),name="fourprof"),
+    path('profile_client/<id>',csrf_exempt(views.profileClient),name="cliprof"),
+    path('modifier_fournisseur/<id>',csrf_exempt(editFournisseur.as_view()),name="editfourni"),
+    path('modifier_client/<id>',csrf_exempt(editClient.as_view()),name="editclient"),
+    path('deleteFournisseur/<id>',csrf_exempt(views.deleteFournisseur),name="deletefour"),
+    path('deleteClient/<id>',csrf_exempt(views.deleteClient),name="deletecli"),
+    path('deleteFacturesFournisseur/<id>',csrf_exempt(views.deleteFacturesFournisseur),name="deletefacfour"),
+    path('deleteFacturesFournisseur/<id>',csrf_exempt(views.deleteFacturesFournisseur),name="deletefaccli"),
     path('modifier/<id>',csrf_exempt(editFac.as_view()),name="edit") 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

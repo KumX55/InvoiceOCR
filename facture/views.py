@@ -5,6 +5,7 @@ from django.shortcuts import redirect, render
 from django.contrib import messages
 from django.views import View
 from numpy import NaN
+
 from .models import Facture, Fournisseur, Client, Produit
 from datetime import datetime
 from django.utils import timezone
@@ -30,15 +31,15 @@ def search_factures(request):
 @login_required(login_url='/authentication/login')
 def upload(request):
     # if request.method == 'GET':
-    #     f = Fournisseur.objects.create(name="Mytek",adress="03 rue habib bourguiba",email="hello@gmail.com",phone="55445851",owner=request.user)
+    #     f = Fournisseur.objects.create(name="Wiki",adress="03 rue Beji matrix",email="Wiki@gmail.com",phone="98030303",owner=request.user)
     #     f.save()
-    #     c = Client.objects.create(name="Mytek matrix 2",adress="04 rue habib bourguiba",email="byebye@gmail.com",phone="99856321",owner=request.user)
+    #     c = Client.objects.create(name="Wiki matrix 2",adress="03 rue Taher hadded",email="Icon@gmail.com",phone="54245862",owner=request.user)
     #     c.save()
-    #     facture = Facture.objects.create(name="Facture Test",owner=request.user,ref_fac="F-2598-TT8",date="17/07/2000",tva="20%",total="4500TND",status="P",fournisseur=f,client=c)
+    #     facture = Facture.objects.create(name="Deuxième Facture",owner=request.user,ref_fac="F-889-R652",date="25/06/2022",total="8500TND",status="P",fournisseur=f,client=c)
     #     facture.save()
-    #     p1 = Produit.objects.create(name="Zephyrus M16",price=6349,facture=facture,owner=request.user)
+    #     p1 = Produit.objects.create(name="Gun M16",prix_u_ht=6756,qty=1,tva="10%",montant=6349,facture=facture,owner=request.user)
     #     p1.save()
-    #     p2 = Produit.objects.create(name="Zephyrus G15",price=8269,facture=facture,owner=request.user)
+    #     p2 = Produit.objects.create(name="Dell G15",prix_u_ht=6875,qty=1,tva="15%",montant=8220,facture=facture,owner=request.user)
     #     p2.save()
     if request.method == 'POST':
         factures = request.FILES.getlist('factures')
@@ -97,19 +98,117 @@ class editFac(View):
             messages.success(request,'Facture Modifié avec succès !!')
             return redirect('edit',id) 
 
+# Fournisseurs Et Clients
 def listeFournisseurs(request):
-    return render(request,'fournisseur/liste_fournisseurs.html')
+    fournisseurs = Fournisseur.objects.filter(owner=request.user)
+    return render(request,'fournisseur/liste_fournisseurs.html',{"fournisseurs":fournisseurs})
 
 def listeClients(request):
-    return render(request,'client/liste_client.html')
+    clients = Client.objects.filter(owner=request.user)
+    return render(request,'client/liste_client.html',{"clients":clients})
 
-def profileFournisseur(request):
-    return render(request,'fournisseur/profile_fournisseur.html')
+def profileFournisseur(request,id): 
+    fournisseur = Fournisseur.objects.get(pk=id)
+    factures = Facture.objects.filter(fournisseur=fournisseur,owner=request.user)
+    paginator = Paginator(factures,8)
+    page_number = request.GET.get('page')
+    page_obj = Paginator.get_page(paginator,page_number)
+    return render(request,'fournisseur/profile_fournisseur.html',{"fournisseur":fournisseur, "factures":factures, 'page_obj': page_obj})
 
-def profileClient(request):
-    return render(request,'client/profile_client.html')
+def profileClient(request,id):
+    client = Client.objects.get(pk=id)
+    factures = Facture.objects.filter(client=client,owner=request.user)
+    paginator = Paginator(factures,8)
+    page_number = request.GET.get('page')
+    page_obj = Paginator.get_page(paginator,page_number)
+    return render(request,'client/profile_client.html',{"client":client, "factures":factures, 'page_obj': page_obj})
 
-def editFournisseur(request):
-    return render(request,'fournisseur/edit_fournisseur.html')
-def editClient(request):
-    return render(request,'client/edit_client.html')
+class editFournisseur(View):
+    def get(self,request,id):
+        fournisseur = Fournisseur.objects.get(pk=id)
+        return render(request,'fournisseur/edit_fournisseur.html',{"fournisseur":fournisseur})
+    def post(self,request,id):
+        fournisseur = Fournisseur.objects.get(pk=id)
+        name = request.POST['name']
+        adress = request.POST['addresse']
+        email = request.POST['email']
+        phone = request.POST['tel']
+        fournisseur.name = name
+        fournisseur.adress = adress
+        fournisseur.email = email
+        fournisseur.phone = phone
+        fournisseur.save()
+        messages.success(request,'Fournisseur Modifié avec succès !!')
+        return redirect('editfourni',id)
+
+class editClient(View):
+    def get(self,request,id):
+        client = Client.objects.get(pk=id)
+        return render(request,'client/edit_client.html',{"client":client})
+    def post(self,request,id):
+        client = Client.objects.get(pk=id)
+        name = request.POST['name']
+        adress = request.POST['addresse']
+        email = request.POST['email']
+        phone = request.POST['tel']
+        client.name = name
+        client.adress = adress
+        client.email = email
+        client.phone = phone
+        client.save()
+        messages.success(request,'Client Modifié avec succès !!')
+        return redirect('editclient',id)
+
+# supprimer fournisseur
+def deleteFournisseur(request,id):
+    fournisseur = Fournisseur.objects.get(pk=id)
+    fournisseur.delete()
+    messages.success(request,'Fournisseur supprimé avec succès !!')
+    return redirect('fourlist')
+# supprimer client
+def deleteClient(request,id):
+    client = Client.objects.get(pk=id)
+    client.delete()
+    messages.success(request,'Client supprimé avec succès !!')
+    return redirect('clilist')
+# supprimer factures fournisseur
+def deleteFacturesFournisseur(request,id):
+    fournisseur = Fournisseur.objects.get(pk=id)
+    factures = Facture.objects.filter(owner=request.user,fournisseur=fournisseur)
+    factures.delete()
+    messages.success(request,'Factures supprimé avec succès !!')
+    return redirect('fourprof',id)
+# supprimer factures client
+def deleteFacturesFournisseur(request,id):
+    client = Client.objects.get(pk=id)
+    factures = Facture.objects.filter(owner=request.user,client=client)
+    factures.delete()
+    messages.success(request,'Factures supprimé avec succès !!')
+    return redirect('cliprof',id)
+
+# Créer Fournisseur
+class createFour(View):
+    def get(self,request):
+        return render(request,'fournisseur/create_fournisseur.html')
+    def post(self,request):
+        name = request.POST['name']
+        adress = request.POST['addresse']
+        email = request.POST['email']
+        phone = request.POST['tel']
+        f = Fournisseur.objects.create(name=name,adress=adress,email=email,phone=phone,owner=request.user)
+        f.save()
+        messages.success(request,'Fournisseur Créé avec succès !!')
+        return redirect('fourlist')
+# Créer Client
+class createCli(View):
+    def get(self,request):
+        return render(request,'client/create_client.html')
+    def post(self,request):
+        name = request.POST['name']
+        adress = request.POST['addresse']
+        email = request.POST['email']
+        phone = request.POST['tel']
+        c = Client.objects.create(name=name,adress=adress,email=email,phone=phone,owner=request.user)
+        c.save()
+        messages.success(request,'Client Créé avec succès !!')
+        return redirect('clilist')

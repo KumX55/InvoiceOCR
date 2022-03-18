@@ -55,13 +55,12 @@
       </div>
       <div class="card-body">
         <form action="" class="form-group py-3 mb-3 ">
-          <label>Référence : <input type="text" name="ref_fac" class="form-control"></label>
-          <label>Date : <input type="text" name="date" class="form-control"></label>
-          <label>Tva : <input type="text" name="tva" class="form-control"></label>
-          <label>Total : <input type="text" name="total" class="form-control"></label>
+          <label>Référence : <input type="text" name="ref_fac" class="form-control" value="{{facture.ref_fac}}"></label>
+          <label>Date : <input type="text" name="date" class="form-control" value="{{facture.date}}"></label>
+          <label>Total : <input type="text" name="total" class="form-control" value="{{facture.total}}"></label>
           <p><label>Produit : <input type="text"  class="form-control" value="Produit" disabled/></label> <label> <button href="#" class="btn btn-info"><i class="fas fa-arrow-right"></i></button></label></p>
-          <p><label>Fournisseur : <input type="text" class="form-control"value="Fournisseur" disabled/></label> <label> <button href="#" class="btn btn-info"><i class="fas fa-arrow-right"></i></button></label></p>
-          <p><label>Client : <input type="text" class="form-control"value="Client" disabled/></label> <label> <button href="#" class="btn btn-info"><i class="fas fa-arrow-right"></i></button></label></p>
+          <p><label>Fournisseur : <input type="text" class="form-control"value="{{facture.fournisseur.name}}" disabled/></label> <label> <button href="#" class="btn btn-info"><i class="fas fa-arrow-right"></i></button></label></p>
+          <p><label>Client : <input type="text" class="form-control"value="{{facture.client.name}}" disabled/></label> <label> <button href="#" class="btn btn-info"><i class="fas fa-arrow-right"></i></button></label></p>
           <select class="form-control" name="status" aria-label="Default select example">
             <option value="1">Payée</option>
             <option value="2">Non payée</option>

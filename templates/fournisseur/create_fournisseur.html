@@ -1,0 +1,29 @@
+{% extends 'appbase.html' %}
+{% load static %}
+{% block content %}
+<head>
+   <title> {% block title %}Créer Fournisseur{% endblock %} </title>
+</head>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Créer Fournisseur</h6>
+                </div>
+                <div class="card-body">
+                    <form action="{% url 'createFour' %}" method="POST" class="form-group">
+                        {% csrf_token %}
+                        <p>Nom : <input type="text" class="form-control mt-2" name="name" /> </p>
+                        <p>Addresse :<input type="text" class="form-control mt-2" name="addresse"  /> </p>
+                        <p>Email : <input type="text" class="form-control mt-2" name="email" /> </p>
+                        <p>Tel :<input type="text" class="form-control mt-2" name="tel"  /> </p>
+                        <input type="submit" class="btn btn-primary mt-2" value="Créer"/> 
+                        {% comment %} <a href="{% url 'suppcompte'%}" class="btn btn-danger float-right mt-2"> Supprimer compte </a> {% endcomment %}
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

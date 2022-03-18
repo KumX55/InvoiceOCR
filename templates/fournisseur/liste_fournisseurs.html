@@ -6,42 +6,20 @@
 </head>
 <div class="container">
     <div class="row">
+      {% for f in fournisseurs %}
         <div class="col lg-2">
-            <div class="card">
-                <a href="{% url 'fourprof'%}">
-                  <!-- THIS DIV IS NOT CLICKABLE BUT I WANT IT TO BE -->
-                  <div class="card-body">
-                    <a href="{% url 'fourprof'%}"><h3 class="card-sub align-middle">Fournisseur 1</h3></a>
-                    <p class="time-card">N factures</p>
-                    <p class="time-card">X à payer encore</p>
-                  </div><!-- END CARD-BODY -->
-                </a>
-              </div><!-- END CARD -->
+          <div class="card">
+              <a href="{% url 'fourprof' f.id %}">
+                <!-- THIS DIV IS NOT CLICKABLE BUT I WANT IT TO BE -->
+                <div class="card-body">
+                  <a href="{% url 'fourprof' f.id %}"><h3 class="card-sub align-middle">{{f.name}}</h3></a>
+                  <p class="time-card">N factures</p>
+                  <p class="time-card">X à payer encore</p>
+                </div><!-- END CARD-BODY -->
+              </a>
+            </div><!-- END CARD -->
         </div>
-        <div class="col lg-2">
-            <div class="card">
-                <a href="{% url 'fourprof'%}">
-                  <!-- THIS DIV IS NOT CLICKABLE BUT I WANT IT TO BE -->
-                  <div class="card-body">
-                    <a href="{% url 'fourprof'%}"><h3 class="card-sub align-middle">Fournisseur 2</h3></a>
-                    <p class="time-card">N factures</p>
-                    <p class="time-card">X à payer encore</p>
-                  </div><!-- END CARD-BODY -->
-                </a>
-              </div><!-- END CARD -->
-        </div>
-        <div class="col lg-2">
-            <div class="card">
-                <a href="{% url 'fourprof'%}">
-                  <!-- THIS DIV IS NOT CLICKABLE BUT I WANT IT TO BE -->
-                  <div class="card-body">
-                    <a href="{% url 'fourprof'%}"><h3 class="card-sub align-middle">Fournisseur 3</h3></a>
-                    <p class="time-card">N factures</p>
-                    <p class="time-card">X à payer encore</p>
-                  </div><!-- END CARD-BODY -->
-                </a>
-              </div><!-- END CARD -->
-        </div>
+      {% endfor %}
     </div>
 </div>
-{% endblock %}
+{% endblock %} 

@@ -12,12 +12,12 @@
                     <h6 class="m-0 font-weight-bold text-primary">Modifier Fournisseur</h6>
                 </div>
                 <div class="card-body">
-                    <form action="" method="POST" class="form-group">
+                    <form action="{% url 'editfourni' fournisseur.id %}" method="POST" class="form-group">
                         {% csrf_token %}
-                        <p>Nom : <input type="text" class="form-control mt-2" name="username"/> </p>
-                        <p>Addresse :<input type="text" class="form-control mt-2" name="addresse" /> </p>
-                        <p>Email : <input type="text" class="form-control mt-2" name="email"/> </p>
-                        <p>Tel :<input type="text" class="form-control mt-2" name="tel" /> </p>
+                        <p>Nom : <input type="text" class="form-control mt-2" name="name" value="{{fournisseur.name}}"/> </p>
+                        <p>Addresse :<input type="text" class="form-control mt-2" name="addresse" value="{{fournisseur.adress}}" /> </p>
+                        <p>Email : <input type="text" class="form-control mt-2" name="email" value="{{fournisseur.email}}"/> </p>
+                        <p>Tel :<input type="text" class="form-control mt-2" name="tel" value="{{fournisseur.phone}}" /> </p>
                         <input type="submit" class="btn btn-primary mt-2" value="Enregistrer"/> 
                         {% comment %} <a href="{% url 'suppcompte'%}" class="btn btn-danger float-right mt-2"> Supprimer compte </a> {% endcomment %}
                         <a class="btn btn-danger float-right mt-3" href="#" data-toggle="modal" data-target="#delcomModal">
@@ -30,14 +30,14 @@
         </div>
     </div>
 </div>
-<form action="" method="post">
+<form action="{% url 'deletefour' fournisseur.id %}" method="post">
         {% csrf_token %} 
     <div class="modal fade" id="delcomModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
         aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Voulez-vous Supprimer votre compte?</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Voulez-vous Supprimer ce fournisseur?</h5>
                     <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
                     </button>
