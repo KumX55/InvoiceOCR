@@ -1,0 +1,50 @@
+{% extends 'appbase.html' %}
+{% load static %}
+{% block content %}
+<head>
+   <title> {% block title %}Créer Facture{% endblock %} </title>
+</head>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-6 mx-auto">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Créer Facture</h6>
+                </div>
+                <div class="card-body">
+                    <form action="{% url 'createFacture' %}" method="POST" class="form-group">
+                        {% csrf_token %}
+                        <p>Facture :</p>
+                        <label>Nom : <input type="text" class="form-control mt-2" name="name" /> </label>
+                        <label>Référence :<input type="text" class="form-control mt-2" name="ref_fac" /> </label>
+                        <p> <label>Date : <input type="text" class="form-control mt-2" name="date" /> </label>
+                        <label>Total :<input type="text" class="form-control mt-2" name="total"  /> </label></p>
+                        <label>Status :
+                        <select class="form-control" name="status" aria-label="Default select example">
+                            <option value="P">Payée</option>
+                            <option value="N">Non payée</option>
+                            <option value="A">Avance Donnée</option>
+                          </select> 
+                        </label>
+                        <hr>
+                        <p>Fournisseur :</p>
+                        <label>Nom : <input type="text" class="form-control mt-2" name="nameF" /> </label>
+                        <label>Addresse :<input type="text" class="form-control mt-2" name="addresseF" /> </label>
+                        <p> <label>Email : <input type="text" class="form-control mt-2" name="emailF" /> </label>
+                        <label>Tel :<input type="text" class="form-control mt-2" name="telF"  /> </label></p>
+
+                        <hr>
+                        <p>Client :</p>
+                        <label>Nom : <input type="text" class="form-control mt-2" name="nameC" /> </label>
+                        <label>Addresse :<input type="text" class="form-control mt-2" name="addresseC" /> </label>
+                        <p> <label>Email : <input type="text" class="form-control mt-2" name="emailC" /> </label>
+                        <label>Tel :<input type="text" class="form-control mt-2" name="telC"  /> </label></p>
+                        
+                        <input type="submit" class="btn btn-primary mt-2" value="Créer"/> 
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

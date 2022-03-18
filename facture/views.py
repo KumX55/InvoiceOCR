@@ -97,7 +97,32 @@ class editFac(View):
             facture.save()
             messages.success(request,'Facture Modifié avec succès !!')
             return redirect('edit',id) 
-
+# Créer Facture
+class createFacture(View):
+    def get(self,request):
+        return render(request,'facture/create_facture.html')
+    def post(self,request):
+       name = request.POST['name']
+       ref_fac = request.POST['ref_fac']
+       date = request.POST['date']
+       total = request.POST['total']
+       status = request.POST['status']
+       nameF = request.POST['nameF']
+       addresseF = request.POST['addresseF']
+       emailF = request.POST['emailF']
+       telF = request.POST['telF']
+       nameC = request.POST['nameC']
+       addresseC = request.POST['addresseC']
+       emailC = request.POST['emailC']
+       telC = request.POST['telC']
+       f = Fournisseur.objects.create(name=nameF,adress=addresseF,email=emailF,phone=telF,owner=request.user)
+       f.save()
+       c = Client.objects.create(name=nameC,adress=addresseC,email=emailC,phone=telC,owner=request.user)
+       c.save()
+       facture = Facture.objects.create(name=name,owner=request.user,ref_fac=ref_fac,date=date,total=total,status=status,fournisseur=f,client=c)
+       facture.save()
+       messages.success(request,'Facture Créé avec succès !!')
+       return redirect('historique')
 # Fournisseurs Et Clients
 def listeFournisseurs(request):
     fournisseurs = Fournisseur.objects.filter(owner=request.user)

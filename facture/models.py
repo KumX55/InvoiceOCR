@@ -8,18 +8,24 @@ from django.contrib.auth.models import User
 # Create your models here.
 
 class Fournisseur(models.Model):
+    creation_date = models.DateField(default=now)
     name = models.CharField(max_length=255, null=True)
     adress = models.CharField(max_length=255, null=True)
     email = models.CharField(max_length=255, null=True)
     phone = models.CharField(max_length=255, null=True)
     owner = models.ForeignKey(to=User, on_delete=models.CASCADE)
+    class Meta:
+        ordering = ['-creation_date']
 
 class Client(models.Model):
+    creation_date = models.DateField(default=now)
     name = models.CharField(max_length=255, null=True)
     adress = models.CharField(max_length=255, null=True)
     email = models.CharField(max_length=255, null=True)
     phone = models.CharField(max_length=255, null=True)
     owner = models.ForeignKey(to=User, on_delete=models.CASCADE)
+    class Meta:
+        ordering = ['-creation_date']
 
 class Facture(models.Model):
     FACTURE_STATUS = (
@@ -37,8 +43,11 @@ class Facture(models.Model):
     status = models.CharField(max_length=1, null=True, choices=FACTURE_STATUS)
     fournisseur = models.ForeignKey(to=Fournisseur, null=True, on_delete=models.CASCADE)
     client = models.ForeignKey(to=Client, null=True, on_delete=models.CASCADE)
+    class Meta:
+        ordering = ['-creation_date']
 
 class Produit(models.Model):
+    creation_date = models.DateField(default=now)
     name = models.CharField(max_length=255, null=True)
     prix_u_ht = models.IntegerField(null=True)
     qty = models.IntegerField(null=True)
@@ -46,6 +55,8 @@ class Produit(models.Model):
     montant = models.IntegerField(null=True)
     facture = models.ForeignKey(to=Facture,on_delete=models.CASCADE)
     owner = models.ForeignKey(to=User, on_delete=models.CASCADE)
+    class Meta:
+        ordering = ['-creation_date']
 
 #     class Meta:
 #         ordering = ['-date']
