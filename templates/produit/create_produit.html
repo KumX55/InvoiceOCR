@@ -2,14 +2,14 @@
 {% load static %}
 {% block content %}
 <head>
-   <title> {% block title %}Créer Produit{% endblock %} </title>
+   <title> {% block title %}Ajouter Produit{% endblock %} </title>
 </head>
 <div class="container-fluid">
     <div class="row">
         <div class="col-lg-6">
             <div class="card shadow mb-4">
                 <div class="card-header py-3">
-                    <h6 class="m-0 font-weight-bold text-primary">Créer Produit Pour La Facture : {{facture.name}} </h6>
+                    <h6 class="m-0 font-weight-bold text-primary">Ajouter Produit Pour La Facture : {{facture.name}} </h6>
                 </div>
                 <div class="card-body">
                     <form action="{% url 'createProd' facture.id %}" method="POST" class="form-group">
@@ -19,7 +19,7 @@
                         <p>qty :<input type="text" class="form-control mt-2" name="qty"  /> </p>
                         <p>tva :<input type="text" class="form-control mt-2" name="tva"  /> </p>
                         <p>montant :<input type="text" class="form-control mt-2" name="montant"  /> </p>
-                        <input type="submit" class="btn btn-primary mt-2" value="Créer"/> 
+                        <input type="submit" class="btn btn-primary mt-2" value="Ajouter"/> 
                     </form>
                 </div>
             </div>

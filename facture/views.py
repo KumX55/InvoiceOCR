@@ -57,7 +57,7 @@ def upload(request):
 class showFac(View):
     @method_decorator(login_required(login_url='/authentication/login'))
     def get(self, request, id):
-        facture = Facture.objects.get(pk=id)
+        facture = Facture.objects.get(pk=id, owner=request.user)
         produit = Produit.objects.filter(facture=facture,owner=request.user)
         return  render(request,'facture/show.html',{'facture':facture, "produit":produit})
     def post(self, request, id):
@@ -76,7 +76,7 @@ class showFac(View):
 # **************************************Supprimer Facture********************************************** #
 @login_required(login_url='/authentication/login')
 def delete(request,id):
-    facture = Facture.objects.get(pk=id)
+    facture = Facture.objects.get(pk=id, owner=request.user)
     facture.delete()
     messages.success(request,'Facture supprimée !!')
     return redirect('home')
@@ -110,12 +110,12 @@ def history(request):
 class editFac(View):
     @method_decorator(login_required(login_url='/authentication/login'))
     def get(self, request, id):
-        facture = Facture.objects.get(pk=id)
+        facture = Facture.objects.get(pk=id, owner=request.user)
         return render(request,'facture/edit.html',{'facture':facture})
     def post(self, request, id):
         file = request.FILES.getlist('facture')
         name = request.POST['name']
-        facture = Facture.objects.get(pk=id)
+        facture = Facture.objects.get(pk=id, owner=request.user)
 
         try:
             facture.files = file[0]
@@ -172,7 +172,7 @@ def listeFournisseurs(request):
 # **************************************Profile Fournisseur********************************************** #
 @login_required(login_url='/authentication/login')
 def profileFournisseur(request,id): 
-    fournisseur = Fournisseur.objects.get(pk=id)
+    fournisseur = Fournisseur.objects.get(pk=id, owner=request.user)
     factures = Facture.objects.filter(fournisseur=fournisseur,owner=request.user)
     paginator = Paginator(factures,8)
     page_number = request.GET.get('page')
@@ -198,7 +198,7 @@ class createFour(View):
 # **************************************supprimer fournisseur********************************************** #
 @login_required(login_url='/authentication/login')
 def deleteFournisseur(request,id):
-    fournisseur = Fournisseur.objects.get(pk=id)
+    fournisseur = Fournisseur.objects.get(pk=id, owner=request.user)
     fournisseur.delete()
     messages.success(request,'Fournisseur supprimé avec succès !!')
     return redirect('fourlist')
@@ -206,7 +206,7 @@ def deleteFournisseur(request,id):
 # **************************************supprimer factures fournisseur********************************************** #
 @login_required(login_url='/authentication/login')
 def deleteFacturesFournisseur(request,id):
-    fournisseur = Fournisseur.objects.get(pk=id)
+    fournisseur = Fournisseur.objects.get(pk=id, owner=request.user)
     factures = Facture.objects.filter(owner=request.user,fournisseur=fournisseur)
     factures.delete()
     messages.success(request,'Factures supprimé avec succès !!')
@@ -217,10 +217,10 @@ def deleteFacturesFournisseur(request,id):
 class editFournisseur(View):
     @method_decorator(login_required(login_url='/authentication/login'))
     def get(self,request,id):
-        fournisseur = Fournisseur.objects.get(pk=id)
+        fournisseur = Fournisseur.objects.get(pk=id, owner=request.user)
         return render(request,'fournisseur/edit_fournisseur.html',{"fournisseur":fournisseur})
     def post(self,request,id):
-        fournisseur = Fournisseur.objects.get(pk=id)
+        fournisseur = Fournisseur.objects.get(pk=id, owner=request.user)
         name = request.POST['name']
         adress = request.POST['addresse']
         email = request.POST['email']
@@ -246,7 +246,7 @@ def listeClients(request):
 # **************************************Profile Client********************************************** #
 @login_required(login_url='/authentication/login')
 def profileClient(request,id):
-    client = Client.objects.get(pk=id)
+    client = Client.objects.get(pk=id, owner=request.user)
     factures = Facture.objects.filter(client=client,owner=request.user)
     paginator = Paginator(factures,8)
     page_number = request.GET.get('page')
@@ -272,7 +272,7 @@ class createCli(View):
 # **************************************supprimer client********************************************** #
 @login_required(login_url='/authentication/login')
 def deleteClient(request,id):
-    client = Client.objects.get(pk=id)
+    client = Client.objects.get(pk=id, owner=request.user)
     client.delete()
     messages.success(request,'Client supprimé avec succès !!')
     return redirect('clilist')
@@ -280,7 +280,7 @@ def deleteClient(request,id):
 # **************************************supprimer factures client********************************************** #
 @login_required(login_url='/authentication/login')
 def deleteFacturesClient(request,id):
-    client = Client.objects.get(pk=id)
+    client = Client.objects.get(pk=id, owner=request.user)
     factures = Facture.objects.filter(owner=request.user,client=client)
     factures.delete()
     messages.success(request,'Factures supprimé avec succès !!')
@@ -290,10 +290,10 @@ def deleteFacturesClient(request,id):
 class editClient(View):
     @method_decorator(login_required(login_url='/authentication/login'))
     def get(self,request,id):
-        client = Client.objects.get(pk=id)
+        client = Client.objects.get(pk=id, owner=request.user)
         return render(request,'client/edit_client.html',{"client":client})
     def post(self,request,id):
-        client = Client.objects.get(pk=id)
+        client = Client.objects.get(pk=id, owner=request.user)
         name = request.POST['name']
         adress = request.POST['addresse']
         email = request.POST['email']
