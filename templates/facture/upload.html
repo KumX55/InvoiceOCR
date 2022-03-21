@@ -111,8 +111,12 @@
                                           <label>Date : <input type="text" name="date" class="form-control" value="{{f.date}}"></label>
                                           <label>Total : <input type="text" name="total" class="form-control" value="{{f.total}}"></label>
                                           <p><label>Produit : <input type="text"  class="form-control" value="Produit" disabled/></label> <label> <a href="#" class="btn btn-info"><i class="fas fa-arrow-right"></i></a></label></p>
+                                          {% if f.fournisseur %}
                                           <p><label>Fournisseur : <input type="text" class="form-control"value="{{f.fournisseur.name}}" disabled/></label> <label> <a href="{% url 'fourprof' f.fournisseur.id %}" class="btn btn-info"><i class="fas fa-arrow-right"></i></a></label></p>
+                                          {% endif %}
+                                          {% if f.client %}
                                           <p><label>Client : <input type="text" class="form-control"value="{{f.client.name}}" disabled/></label> <label> <a href="{% url 'cliprof' f.client.id %}" class="btn btn-info"><i class="fas fa-arrow-right"></i></a></label></p>
+                                          {% endif %}
                                           <select class="form-control" name="status" aria-label="Default select example">
                                             <option value="P">Payée</option>
                                             <option value="N">Non payée</option>

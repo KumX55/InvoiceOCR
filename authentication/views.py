@@ -18,6 +18,8 @@ from django.utils.encoding import force_str
 from django.utils.http import   urlsafe_base64_decode, urlsafe_base64_encode
 from django.contrib.sites.shortcuts import get_current_site
 from .utils import token_generator
+from django.utils.decorators import method_decorator
+from django.contrib.auth.decorators import login_required
 
 
 # **************************************Validation du nom d'utilisateur********************************************** #
@@ -142,6 +144,7 @@ class LogoutView(View):
 
 # **************************************Mot de passe Oublié********************************************** #
 class RequestPasswordView(View):
+    @method_decorator(login_required(login_url='/authentication/login'))
     def get(self, request):
         return render(request,'authentication/reset-password.html')
     def post(self, request):
@@ -221,7 +224,8 @@ class CompletePasswordreset(View):
         # return render(request,'authentication/set-new-password.html',context)
 
 # **************************************Profile Utilisateur********************************************** #
-class ProfileView(View):
+class ProfileView(View): 
+    @method_decorator(login_required(login_url='/authentication/login'))
     def get(self, request):
         u = request.user
         username = u.username
@@ -241,6 +245,7 @@ class ProfileView(View):
             u.email = email
             u.save()
             messages.success(request,'Compte modifié avec succès !!')
+            auth.logout(request)
             return redirect('login')
         else:
             u.username = username
@@ -248,10 +253,12 @@ class ProfileView(View):
             u.set_password(password)
             u.save()
             messages.success(request,'Compte modifié avec succès !!')
+            auth.logout(request)
             return redirect('login')
 
 # **************************************Supprimer compte utilisateur********************************************** #
 class DeleteAccount(View):
+    @method_decorator(login_required(login_url='/authentication/login'))
     def get(self, request):
         messages.success(request,'Compte supprimé !!')
         return redirect('login')
