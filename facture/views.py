@@ -6,6 +6,7 @@ from django.shortcuts import redirect, render
 from django.contrib import messages
 from django.views import View
 from numpy import NaN
+from django.core.mail import EmailMessage
 
 from .models import Facture, Fournisseur, Client, Produit
 from datetime import datetime
@@ -53,11 +54,25 @@ def upload(request):
     return render(request,'facture/upload.html',{'factures':factures, 'page_obj': page_obj})
 
 # **************************************Visualiser Facture********************************************** #
-@login_required(login_url='/authentication/login')
-def show(request,id):
-    facture = Facture.objects.get(pk=id)
-    return  render(request,'facture/show.html',{'facture':facture})
-
+class showFac(View):
+    @method_decorator(login_required(login_url='/authentication/login'))
+    def get(self, request, id):
+        facture = Facture.objects.get(pk=id)
+        produit = Produit.objects.filter(facture=facture,owner=request.user)
+        return  render(request,'facture/show.html',{'facture':facture, "produit":produit})
+    def post(self, request, id):
+        facture = Facture.objects.get(pk=id)
+        ref_fac = request.POST['ref_fac'] 
+        date = request.POST['date']
+        total = request.POST['total']
+        status = request.POST['status']
+        facture.ref_fac = ref_fac
+        facture.date = date
+        facture.total = total
+        facture.status = status
+        facture.save()
+        messages.success(request, 'Facture Modifiée avec succès !!')
+        return redirect('show', id)
 # **************************************Supprimer Facture********************************************** #
 @login_required(login_url='/authentication/login')
 def delete(request,id):
@@ -290,3 +305,111 @@ class editClient(View):
         client.save()
         messages.success(request,'Client Modifié avec succès !!')
         return redirect('editclient',id)
+# **************************************Contactez Fournisseur********************************************** #
+@login_required(login_url='/authentication/login')
+def contactFour(request,id):
+    if request.method == "POST":
+        user = request.user
+        fournisseur = Fournisseur.objects.get(pk=id, owner=request.user)
+        emailF = fournisseur.email
+        emailU = user.email
+        nameU = user.username
+        message = request.POST['message']
+        subject = request.POST['subject']
+        coord = request.POST['coord']
+
+        email_body = 'Message de : '+nameU+'\n'+ 'Son adresse email : '+emailU+'\nMessage : \n'+message+ '\n' + 'Ses coordonnées : '+coord+" ."
+        mail = EmailMessage(
+            subject,
+            email_body,
+            'recfac@Contact.com',
+            [emailF],
+        )
+        mail.send(fail_silently=False)
+        messages.success(request,'Message bien envoyé !!')
+        return redirect('fourprof', id)
+# **************************************Contactez Client********************************************** #
+@login_required(login_url='/authentication/login')
+def contactCli(request,id):
+    if request.method == "POST":
+        user = request.user
+        client = Client.objects.get(pk=id, owner=request.user)
+        emailC = client.email
+        emailU = user.email
+        nameU = user.username
+        message = request.POST['message']
+        subject = request.POST['subject']
+        coord = request.POST['coord']
+
+        email_body = 'Message de : '+nameU+'\n'+ 'Son adresse email : '+emailU+'\nMessage : \n'+message+ '\n' + 'Ses coordonnées : '+coord+" ."
+        mail = EmailMessage(
+            subject,
+            email_body,
+            'recfac@Contact.com',
+            [emailC],
+        )
+        mail.send(fail_silently=False)
+        messages.success(request,'Message bien envoyé !!')
+        return redirect('cliprof', id)
+# **************************************Créer Produit********************************************** #
+class createProd(View):
+    @method_decorator(login_required(login_url='/authentication/login'))
+    def get(self,request,id):
+        facture = Facture.objects.get(pk=id, owner=request.user)
+        return render(request,'produit/create_produit.html',{"facture":facture})
+    def post(self,request,id):
+        facture = Facture.objects.get(pk=id, owner=request.user)
+        name = request.POST['name']
+        prix_u_ht = request.POST['prix_u_ht']
+        qty = request.POST['qty']
+        tva = request.POST['tva']
+        montant = request.POST['montant']
+        p = Produit.objects.create(name=name,prix_u_ht=prix_u_ht,qty=qty,tva=tva,montant=montant,facture=facture,owner=request.user)
+        p.save()
+        messages.success(request,'Produit Créé avec succès !!')
+        return redirect('show', id)
+# **************************************Créer Produit********************************************** #
+@login_required(login_url='/authentication/login')
+def listeProd(request, id):
+    facture = Facture.objects.get(pk=id, owner=request.user)
+    produits = Produit.objects.filter(facture=facture, owner=request.user)
+    paginator = Paginator(produits,8)
+    page_number = request.GET.get('page')
+    page_obj = Paginator.get_page(paginator,page_number)
+    return render(request,'produit/liste_produits_facture.html',{"facture":facture, "produits":produits, "page_obj": page_obj})
+# **************************************Visualiser/Modifier Produit********************************************** #
+class showProd(View):
+    @method_decorator(login_required(login_url='/authentication/login'))
+    def get(self, request, id):
+        produit = Produit.objects.get(pk=id, owner=request.user)
+        return render(request, 'produit/profile_produit.html',{"produit":produit})
+    def post(self, request, id):
+        p = Produit.objects.get(pk=id, owner=request.user)
+        name = request.POST['name']
+        prix_u_ht = request.POST['prix_u_ht']
+        qty = request.POST['qty']
+        tva = request.POST['tva']
+        montant = request.POST['montant']
+        p.name = name
+        p.prix_u_ht = prix_u_ht
+        p.qty = qty
+        p.tva = tva
+        p.montantp = montant
+        p.save()
+        messages.success(request,'Produit Modifié avec succès !!')
+        return redirect('showProd', id)
+# **************************************Supprimer Produit********************************************** #
+@login_required(login_url='/authentication/login')
+def deleteProd(request, id):
+    produit = Produit.objects.get(pk=id, owner=request.user)
+    produit.delete()
+    messages.success(request,'Produit Supprimé avec succès !!')
+    return redirect("home")
+# **************************************Supprimer Produits********************************************** #
+@login_required(login_url='/authentication/login')
+def deleteAllProd(request, id):
+    facture = Facture.objects.get(pk=id, owner=request.user)
+    produits = Produit.objects.filter(facture=facture, owner=request.user)
+    produits.delete()
+    messages.success(request,'Produits Supprimés avec succès !!')
+    return redirect("show", id)

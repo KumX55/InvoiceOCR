@@ -18,6 +18,7 @@
                 aria-labelledby="dropdownMenuLink">
                 <a class="dropdown-item" href="{% url 'edit' facture.id %}">Modifier facture</a>
                 <a class="dropdown-item" href="#" data-toggle="modal" data-target="#delcomModal">Supprimer facture</a>
+                <a class="dropdown-item" href="{% url 'createProd' facture.id %}">Ajouter Produit</a>
             </div>
               </div>
           </div>
@@ -54,11 +55,11 @@
           <h6 class="m-0 font-weight-bold text-primary">Champs</h6>
       </div>
       <div class="card-body">
-        <form action="" class="form-group py-3 mb-3 ">
+        <form action="{% url 'show' facture.id %}" method="post" class="form-group py-3 mb-3 ">
           <label>Référence : <input type="text" name="ref_fac" class="form-control" value="{{facture.ref_fac}}"></label>
           <label>Date : <input type="text" name="date" class="form-control" value="{{facture.date}}"></label>
           <label>Total : <input type="text" name="total" class="form-control" value="{{facture.total}}"></label>
-          <p><label>Produit : <input type="text"  class="form-control" value="Produit" disabled/></label> <label> <a href="#" class="btn btn-info"><i class="fas fa-arrow-right"></i></a></label></p>
+          <p><label>Produit : <input type="text"  class="form-control" value="Produits" disabled/></label> <label> <a href="{% url 'showLprod' facture.id %}" class="btn btn-info"><i class="fas fa-arrow-right"></i></a></label></p>
           <p><label>Fournisseur : <input type="text" class="form-control"value="{{facture.fournisseur.name}}" disabled/></label> <label> <a href="{% url 'fourprof' facture.fournisseur.id %}" class="btn btn-info"><i class="fas fa-arrow-right"></i></a></label></p>
           <p><label>Client : <input type="text" class="form-control"value="{{facture.client.name}}" disabled/></label> <label> <a href="{% url 'cliprof' facture.client.id %}" class="btn btn-info"><i class="fas fa-arrow-right"></i></a></label></p>
           <select class="form-control" name="status" aria-label="Default select example">

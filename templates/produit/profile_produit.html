@@ -1,4 +1,51 @@
 {% extends 'appbase.html' %}
 {% load static %}
 {% block content %}
+<head>
+   <title> {% block title %}Produit {{produit.name}}{% endblock %} </title>
+</head>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Produit : {{produit.name}}</h6>
+                </div>
+                <div class="card-body">
+                    <form action="{% url 'showProd' produit.id %}" method="POST" class="form-group">
+                        {% csrf_token %}
+                        <p>Nom : <input type="text" class="form-control mt-2" name="name" value="{{produit.name}}" /> </p>
+                        <p>prix_u_ht : <input type="text" class="form-control mt-2" name="prix_u_ht" value="{{produit.prix_u_ht}}"/> </p>
+                        <p>qty :<input type="text" class="form-control mt-2" name="qty" value="{{produit.qty}}" /> </p>
+                        <p>tva :<input type="text" class="form-control mt-2" name="tva"  value="{{produit.tva}}" </p>
+                        <p>montant :<input type="text" class="form-control mt-2" name="montant"  value="{{produit.montant}}"/> </p>
+                        <input type="submit" class="btn btn-primary mt-2" value="Sauvegarder"/> 
+                        <a class="btn btn-danger float-right mt-2" href="#" data-toggle="modal" data-target="#delcomModal">Supprimer Produit</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<form action="{% url 'deleteprod' produit.id %}" method="post">
+        {% csrf_token %} 
+    <div class="modal fade" id="delcomModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Voulez-vous Supprimer ce produit?</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">Selectionnez "Oui" si vous êtes sure</div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Annuler</button>
+                    <input class="btn btn-danger" type="submit" value="Oui">
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
 {% endblock %}

@@ -16,7 +16,7 @@ class Fournisseur(models.Model):
     phone = models.CharField(max_length=255, null=True)
     owner = models.ForeignKey(to=User, on_delete=models.CASCADE)
     class Meta:
-        ordering = ['-creation_date']
+        ordering = ['-pk']
 
 # **************************************Client********************************************** #
 class Client(models.Model):
@@ -27,7 +27,7 @@ class Client(models.Model):
     phone = models.CharField(max_length=255, null=True)
     owner = models.ForeignKey(to=User, on_delete=models.CASCADE)
     class Meta:
-        ordering = ['-creation_date']
+        ordering = ['-pk']
 
 # **************************************Facture********************************************** #
 class Facture(models.Model):
@@ -47,7 +47,7 @@ class Facture(models.Model):
     fournisseur = models.ForeignKey(to=Fournisseur, null=True, on_delete=models.CASCADE)
     client = models.ForeignKey(to=Client, null=True, on_delete=models.CASCADE)
     class Meta:
-        ordering = ['-creation_date']
+        ordering = ['-pk']
 
 # **************************************Produit********************************************** #
 class Produit(models.Model):
@@ -60,7 +60,7 @@ class Produit(models.Model):
     facture = models.ForeignKey(to=Facture,on_delete=models.CASCADE)
     owner = models.ForeignKey(to=User, on_delete=models.CASCADE)
     class Meta:
-        ordering = ['-creation_date']
+        ordering = ['-pk']
 
 #     class Meta:
 #         ordering = ['-date']

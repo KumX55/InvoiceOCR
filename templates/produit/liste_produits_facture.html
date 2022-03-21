@@ -1,0 +1,107 @@
+{% extends 'appbase.html' %}
+{% load static %}
+{% block content %}
+<head>
+    <title> {% block title %} Liste des produits {% endblock %} </title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+    <link rel="stylesheet" href="{% static 'app/facture/style.css'%}">
+    <link href='https://fonts.googleapis.com/css?family=Roboto:400,100,300,700' rel='stylesheet' type='text/css'>
+    <style>
+    .titi:hover {
+      background: #f4ebff75;
+      color: black;
+      } 
+    </style>
+  </head>
+<div class="container">
+    {% if produits.count %}
+      <form action="" class="pb-3 w-100">
+        <input type="text" class="form-control" id="searchField" placeholder="Rechercher"/>
+      </form>
+        <div class="factures-table">
+          <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Les Produit de la facture : {{facture.name}}</h6>
+                <a href="#" class="btn btn-danger float-right" data-toggle="modal" data-target="#delfacomModal">Supprimer tous les produits de cette facture</a>
+            </div>
+            <div class="card-body">
+                <table class="table table-responsive-xl">
+                   <thead>
+                      <tr>
+                        <th>Name</th>
+                        <th>Date</th>
+                        <th></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {% for p in page_obj %} 
+                        <tr class="alert titi clickable-row" role="alert" style="cursor: pointer;" data-href="{% url 'showProd' p.id %}">
+                          <td>{{p.name}}</td>
+                          <td>{{p.creation_date}}</td>
+                          <td><a href="#" class="btn btn-light btn-icon-split">
+                            <span class="icon text-gray-50">
+                                <i class="fas fa-arrow-right"></i>
+                            </span>
+                          </a></td>
+                        </tr>
+                      {% endfor %}
+                    </tbody>
+                 </table>
+                  <div class="pagination-container">
+                    <div class="">
+                      Page {{page_obj.number}} sur {{page_obj.paginator.num_pages}}
+                    </div>
+                    <ul class="pagination align-right float-right mr-auto">
+                      {% if page_obj.has_previous %}
+                        <li {% if page_obj.number == 1 %} class="page-item active" {% endif %}><a class="page-link" href="?page=1">&laquo; 1</a></li>
+                        <li class="page-item"> <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Pécédent</a></li>
+                        {% endif %}
+                    
+                        {% if page_obj.has_next %}
+                        <li class="page-item"> <a class="page-link" href="?page={{ page_obj.next_page_number }}">Suivant</a></li>
+                        <li class="page-item"> <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">{{ page_obj.paginator.num_pages}} &raquo;</a></li>
+                      {% endif %}
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+            {% else %}
+            <div class="container">
+                <h6>Pas De Produits Pour Cette Facture</h6>
+            </div>
+    {% endif %}
+    
+</div>
+<form action="{% url 'deleteAllprod' facture.id %}" method="post">
+    {% csrf_token %} 
+  <div class="modal fade" id="delfacomModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Voulez-vous Supprimer tous les produits?</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">Selectionnez "Oui" si vous êtes sure</div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" type="button" data-dismiss="modal">Annuler</button>
+                <input class="btn btn-danger" type="submit" value="Oui">
+            </div>
+        </div>
+    </div>
+  </div>
+  </form>
+  <!--Scripts-->
+  <script>
+      jQuery(document).ready(function($) {
+        $(".clickable-row").click(function() {
+            window.location = $(this).data("href");
+        });
+    });
+  </script>
+{% endblock %}

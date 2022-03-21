@@ -58,7 +58,7 @@
     <div class="card-body">
     <div class="row">
         <div class="col">
-            <form class="form-group" action="">
+            <form class="form-group" action="{% url 'contactCli' client.id %}" method="post">
                 <input type="text" class="form-control mt-2" name="subject" placeholder="sujet"/>
                 <input type="text" class="form-control mt-2" name="message" placeholder="message"/>
                 <input type="text" class="form-control mt-2" name="coord" placeholder="Vos coordonnées"/>

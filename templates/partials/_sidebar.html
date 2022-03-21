@@ -34,7 +34,7 @@
         <a class="nav-link collapsed" href="{% url 'home'%}" data-target="#collapseTwo"
             aria-expanded="true" aria-controls="collapseTwo">
             <i class="fas fa-fw fa-cog"></i>
-            <span>Facture</span>
+            <span>Import-Vue</span>
         </a>
         <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
@@ -107,7 +107,7 @@
             </a> </li>
     <hr class="sidebar-divider">
 
-    <!-- Heading -->
+    {% comment %} <!-- Heading -->
     <div class="sidebar-heading">
         Produit
     </div>
@@ -118,7 +118,7 @@
             <span>Liste des Produits</span>
         </a> </li>
     <!-- Divider -->
-    <hr class="sidebar-divider">
+    <hr class="sidebar-divider"> {% endcomment %}
 
     <!-- Heading -->
     <div class="sidebar-heading">
