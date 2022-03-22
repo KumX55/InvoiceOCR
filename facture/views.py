@@ -1,5 +1,6 @@
 from email import message
 import imp
+from tkinter import W
 from django.utils.decorators import method_decorator
 from unicodedata import name
 from django.shortcuts import redirect, render
@@ -14,8 +15,10 @@ from django.utils import timezone
 from django.core.paginator import Paginator
 import os
 import json
-from django.http import JsonResponse
+from django.http import HttpResponse, JsonResponse
 from django.contrib.auth.decorators import login_required
+import csv
+import xlwt
 
 # ****************************************************************************************************************** #
     # **************************************Factures********************************************** #
@@ -413,3 +416,55 @@ def deleteAllProd(request, id):
     produits.delete()
     messages.success(request,'Produits Supprimés avec succès !!')
     return redirect("show", id)
+
+# ****************************************************************************************************** #
+# *****************************************Export CSV*************************************************** #
+def export_facture_csv(request,id):
+    facture = Facture.objects.get(pk=id, owner=request.user)
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename=Facture'+facture.name+'_'+facture.creation_date+'.csv'
+    
+    writer = csv.writer(response)
+    writer.writerow(['Nom', 'Référence', 'Date', 'Total', 'Status', 
+                     'Nom Fournisseur','Addresse Fournisseur','Email Fournisseur','Tel Fournisseur',
+                     'Nom Client','Addresse Client','Email Client','Tel Client',
+                     'Nom Produit','Prix Unité Hors Taxi','Quantité','TVA','Montant',])
+    
+    produits = Produit.objects.filter(facture=facture, owner=request.user)
+
+    writer.writerow([facture.name, facture.ref_fac, facture.date, facture.total, facture.status, 
+                     facture.fournisseur.name,facture.fournisseuradress,facture.fournisseuremail,facture.fournisseurphone,
+                     facture.client.name,facture.clientadress,facture.clientemail,facture.clientphone,
+                     produits[0].name,produits[0].prix_u_ht,produits[0].qty,produits[0].tva,produits[0].montant,])
+    
+    produits = produits[1:]
+
+    for produit in produits:
+        writer.writerow(['', '', '', '', '', 
+                        '','','','',
+                        '','','','',
+                        produit.name,produit.prix_u_ht,produit.qty,produit.tva,produit.montant,])
+    return response
+# *****************************************Export Excel*************************************************** #
+def export_facture_excel(request,id):
+    facture = Facture.objects.get(pk=id, owner=request.user)
+    response = HttpResponse(content_type='application/ms-excel')
+    response['Content-Disposition'] = 'attachment; filename=Facture'+facture.name+'_'+facture.creation_date+'.xls'
+
+    wb = xlwt.Workbook(encoding='utf-8')
+    ws = wb.add_sheet('Facture')
+    row_num = 0
+    font_style =xlwt.XFStyle()
+    font_style.font.bold = True
+
+    columns = ['Nom', 'Référence', 'Date', 'Total', 'Status', 
+               'Nom Fournisseur','Addresse Fournisseur','Email Fournisseur','Tel Fournisseur',
+               'Nom Client','Addresse Client','Email Client','Tel Client',
+               'Nom Produit','Prix Unité Hors Taxi','Quantité','TVA','Montant',]
+    
+    for  col_num in range(len(columns)):
+        ws.wrtie(row_num, col_num, columns[col_num], font_style)
+
+    rows = facture.values_list()
+
+    return response

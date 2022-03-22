@@ -11,6 +11,7 @@ urlpatterns = [
     path('upload',csrf_exempt(views.upload),name="home"),
     path('historique',csrf_exempt(views.history),name="historique"),
     path('show/<id>',csrf_exempt(showFac.as_view()),name="show"),
+    path('exporter_facture_csv/<id>',csrf_exempt(views.export_facture_csv),name="exportCsv"),
     path('show_produits/<id>',csrf_exempt(views.listeProd),name="showLprod"),
     path('show_produit/<id>',csrf_exempt(showProd.as_view()),name="showProd"),
     path('créer_facture',csrf_exempt(createFacture.as_view()),name="createFacture"),
