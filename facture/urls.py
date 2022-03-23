@@ -1,7 +1,7 @@
 from os import name
 from django.urls import path
 from . import views
-from .views import editFac, editFournisseur, editClient, createFour , createCli, createFacture, createProd, showFac, showProd
+from .views import editFac, editFournisseur, editClient, createFour , createCli, createFacture, createProd, showFac, showProd, editProd, AjoutProduit
 from django.conf import settings
 from django.conf.urls.static import static
 from django.views.decorators.csrf import csrf_exempt
@@ -14,6 +14,10 @@ urlpatterns = [
     path('exporter_facture_csv/<id>',csrf_exempt(views.export_facture_csv),name="exportCsv"),
     path('show_produits/<id>',csrf_exempt(views.listeProd),name="showLprod"),
     path('show_produit/<id>',csrf_exempt(showProd.as_view()),name="showProd"),
+    path('ajout_produit',csrf_exempt(AjoutProduit.as_view()),name="AjoutProduit"),
+    path('modifier_produit/<id>',csrf_exempt(editProd.as_view()),name="editProd"),
+    path('liste_produits',csrf_exempt(views.AllProd),name="AllProd"),
+    path('détacher_facture/<idf>/<idp>',csrf_exempt(views.removeFacProd),name="removeFacProd"),
     path('créer_facture',csrf_exempt(createFacture.as_view()),name="createFacture"),
     path('créer_produit/<id>',csrf_exempt(createProd.as_view()),name="createProd"),
     path('delete/<id>',csrf_exempt(views.delete),name="deletefac"),

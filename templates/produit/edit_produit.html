@@ -1,4 +1,36 @@
 {% extends 'appbase.html' %}
 {% load static %}
 {% block content %}
+<head>
+    <title> {% block title %}Modifier Produit{% endblock %} </title>
+ </head>
+ <div class="container-fluid">
+     <div class="row">
+         <div class="col-lg-6">
+             <div class="card shadow mb-4">
+                 <div class="card-header py-3">
+                     <h6 class="m-0 font-weight-bold text-primary">Produit : {{produit.name}}</h6>
+                 </div>
+                 <div class="card-body">
+                     <form action="{% url 'editProd' produit.id %}" method="POST" class="form-group">
+                         {% csrf_token %}
+                         <p>Nom : <input type="text" class="form-control mt-2" name="name" value="{{produit.name}}" /> </p>
+                         <p>Prix Unité Hors Taxe : <input type="text" class="form-control mt-2" name="prix_u_ht" value="{{produit.prix_u_ht}}"/> </p>
+                         <p>Quantité :<input type="text" class="form-control mt-2" name="qty" value="{{produit.qty}}" /> </p>
+                         <p>TVA :<input type="text" class="form-control mt-2" name="tva"  value="{{produit.tva}}"/> </p>
+                         <p>Montant :<input type="text" class="form-control mt-2" name="montant"  value="{{produit.montant}}"/> </p>
+                         <select class="form-control" name="facture" aria-label="Default select example" multiple>
+                            <option selected value=""></option>
+                            {% for f in factures %}
+                                <option value="{{ f.id }}">{{ f.name }}</option>
+                            {% endfor %}
+                          </select> 
+                         <input type="submit" class="btn btn-primary mt-2" value="Sauvegarder"/> 
+                         <a class="btn btn-danger float-right mt-2" href="#" data-toggle="modal" data-target="#delcomModal">Supprimer Produit</a>
+                     </form>
+                 </div>
+             </div>
+         </div>
+     </div>
+ </div>
 {% endblock %}

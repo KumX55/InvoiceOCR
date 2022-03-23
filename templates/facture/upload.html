@@ -108,6 +108,7 @@
                                       </div>
                                       <div class="card-body">
                                         <form action="{% url 'show' f.id %}" method="post" class="form-group py-3 mb-3 ">
+                                          {% csrf_token %}
                                           <label>Référence : <input type="text" name="ref_fac" class="form-control" value="{{f.ref_fac}}"></label>
                                           <label>Date : <input type="text" name="date" class="form-control" value="{{f.date}}"></label>
                                           <label>Total : <input type="text" name="total" class="form-control" value="{{f.total}}"></label>
@@ -226,6 +227,7 @@
                <div class="container">
                 <div class="wrapper mt-5">
                     <form action="{% url 'home'%}" class="form-group upload-form" method="POST" style="cursor: pointer;" enctype="multipart/form-data">
+                      {% csrf_token %}
                       <input class="file-input" type="file" name="factures" multiple hidden/>
                       <img class="jss301" src="https://cdn.nanonets.com/media/invoice.svg" alt="">
                       <p>Importer votre facture</p>

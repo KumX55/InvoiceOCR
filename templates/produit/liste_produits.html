@@ -2,21 +2,20 @@
 {% load static %}
 {% block content %}
 <head>
-  <title>{% block title %}Clients{% endblock %}</title>
+  <title>{% block title %}Produits{% endblock %}</title>
 </head>
 <div class="container">
-  <a href="{% url 'clilist' %}" class="btn btn-primary">Ajouter Client</a>
+    <a href="{% url 'AjoutProduit' %}" class="btn btn-primary">Ajouter Produit</a>
   <hr>
     <div class="row">
-      {% for c in clients %}
+      {% for p in produits %}
         <div class="col lg-2">
           <div class="card">
-              <a href="{% url 'cliprof' c.id %}">
+              <a href="{% url 'showProd' p.id %}">
                 <!-- THIS DIV IS NOT CLICKABLE BUT I WANT IT TO BE -->
                 <div class="card-body">
-                  <a href="{% url 'cliprof' c.id%}"><h3 class="card-sub align-middle">{{c.name}}</h3></a>
+                  <a href="{% url 'showProd' p.id %}"><h3 class="card-sub align-middle">{{p.name}}</h3></a>
                   <p class="time-card">N factures</p>
-                  <p class="time-card">X à payer encore</p>
                 </div><!-- END CARD-BODY -->
               </a>
             </div><!-- END CARD -->
@@ -24,4 +23,4 @@
       {% endfor %}
     </div>
 </div>
-{% endblock %}
+{% endblock %} 

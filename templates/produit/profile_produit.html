@@ -3,6 +3,15 @@
 {% block content %}
 <head>
    <title> {% block title %}Produit {{produit.name}}{% endblock %} </title>
+   <style>
+    .justify-content-end{
+        color: rgb(0, 153, 255);
+    }
+    .titi:hover {
+        background: #f4ebff75;
+        color: black;
+        } 
+</style>
 </head>
 <div class="container-fluid">
     <div class="row">
@@ -10,21 +19,93 @@
             <div class="card shadow mb-4">
                 <div class="card-header py-3">
                     <h6 class="m-0 font-weight-bold text-primary">Produit : {{produit.name}}</h6>
+                    <div class="dropdown no-arrow float-right">
+                        <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
+                        aria-labelledby="dropdownMenuLink">
+                        <a class="dropdown-item" href="{% url 'editProd' produit.id %}">Modifier Produit</a>
+                        <a class="dropdown-item" href="#" data-toggle="modal" data-target="#delcomModal">Supprimer Produit</a>
+                    </div>
+                    </div>
                 </div>
-                <div class="card-body">
-                    <form action="{% url 'showProd' produit.id %}" method="POST" class="form-group">
-                        {% csrf_token %}
-                        <p>Nom : <input type="text" class="form-control mt-2" name="name" value="{{produit.name}}" /> </p>
-                        <p>prix_u_ht : <input type="text" class="form-control mt-2" name="prix_u_ht" value="{{produit.prix_u_ht}}"/> </p>
-                        <p>qty :<input type="text" class="form-control mt-2" name="qty" value="{{produit.qty}}" /> </p>
-                        <p>tva :<input type="text" class="form-control mt-2" name="tva"  value="{{produit.tva}}" </p>
-                        <p>montant :<input type="text" class="form-control mt-2" name="montant"  value="{{produit.montant}}"/> </p>
-                        <input type="submit" class="btn btn-primary mt-2" value="Sauvegarder"/> 
-                        <a class="btn btn-danger float-right mt-2" href="#" data-toggle="modal" data-target="#delcomModal">Supprimer Produit</a>
-                    </form>
+                <div class="card-body mt-3 mb-2">
+                    <div class="row">
+                        <div class="col">
+                            <div class="d-flex justify-content-end">Nom : </div>  
+                            <div class="d-flex justify-content-end">Prix Unité Hors Taxe : </div>
+                            <div class="d-flex justify-content-end">Quantité : </div>
+                            <div class="d-flex justify-content-end">TVA : </div>
+                            <div class="d-flex justify-content-end">Montant : </div>
+                        </div>
+                        <div class="col"> 
+                            <div class="d-flex justify-content-start">{{ produit.name }}</div>
+                            <div class="d-flex justify-content-start">{{ produit.prix_u_ht }}</div>
+                            <div class="d-flex justify-content-start">{{ produit.qty }}</div>
+                            <div class="d-flex justify-content-start">{{ produit.tva }}</div>
+                            <div class="d-flex justify-content-start">{{ produit.montant }}</div>
+                        </div>
+                        </div>
                 </div>
             </div>
         </div>
+        {% if factures.count %}
+<div class="col lg-6">
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Les Factures</h6>
+        </div>
+        <div class="card-body">
+            <table class="table table-responsive-xl">
+               <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Date</th> 
+                    <th></th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                    {% for f in page_obj %}
+                    <tr class="alert titi clickable-row" role="alert" style="cursor: pointer;" data-href="#">
+                      <td>{{f.name}}</td>
+                      <td>{{f.creation_date}}</td>
+                      <td><a href="{% url 'show' f.id %}" class="btn btn-light btn-icon-split">
+                        <span class="icon text-gray-50">
+                            <i class="fas fa-arrow-right"></i>
+                        </span>
+                      </a></td>
+                      <td><a href="{% url 'removeFacProd' f.id produit.id %}" class="btn btn-danger">
+                        <span class="icon">
+                            <i class="fas fa-trash"></i>
+                        </span>
+                      </a></td>
+                    </tr>
+                  {% endfor %}
+                </tbody>
+             </table>
+             <div class="pagination-container">
+                <div class="">
+                  Page {{page_obj.number}} sur {{page_obj.paginator.num_pages}}
+                </div>
+                <ul class="pagination align-right float-right mr-auto">
+                  {% if page_obj.has_previous %}
+                    <li {% if page_obj.number == 1 %} class="page-item active" {% endif %}><a class="page-link" href="?page=1">&laquo; 1</a></li>
+                    <li class="page-item"> <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Pécédent</a></li>
+                    {% endif %}
+                
+                    {% if page_obj.has_next %}
+                    <li class="page-item"> <a class="page-link" href="?page={{ page_obj.next_page_number }}">Suivant</a></li>
+                    <li class="page-item"> <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">{{ page_obj.paginator.num_pages}} &raquo;</a></li>
+                  {% endif %}
+                </ul>
+              </div>
+          </div>
+      </div>
+</div>
+{% endif %}
     </div>
 </div>
 <form action="{% url 'deleteprod' produit.id %}" method="post">

@@ -81,12 +81,12 @@
             <i class="fas fa-fw fa-folder"></i>
             <span>Liste des Fournisseurs</span>
         </a> </li>
-        <li class="nav-item">
+        {% comment %} <li class="nav-item">
             <a class="nav-link collapsed" href="{% url 'createFour' %}" data-target="#collapsePages"
                 aria-expanded="true" aria-controls="collapsePages">
                 <i class="fas fa-fw fa-folder"></i>
                 <span>Créer Fournisseur</span>
-            </a> </li>
+            </a> </li> {% endcomment %}
     <hr class="sidebar-divider">
 
     <!-- Heading -->
@@ -99,26 +99,26 @@
             <i class="fas fa-fw fa-folder"></i>
             <span>Liste des Clients</span>
         </a> </li>
-        <li class="nav-item">
+        {% comment %} <li class="nav-item">
             <a class="nav-link collapsed" href="{% url 'createCli' %}" data-target="#collapsePages"
                 aria-expanded="true" aria-controls="collapsePages">
                 <i class="fas fa-fw fa-folder"></i>
                 <span>Créer Client</span>
-            </a> </li>
+            </a> </li> {% endcomment %}
     <hr class="sidebar-divider">
 
-    {% comment %} <!-- Heading -->
+    <!-- Heading -->
     <div class="sidebar-heading">
         Produit
     </div>
     <li class="nav-item">
-        <a class="nav-link collapsed" href="{% url 'profile' %}" data-target="#collapsePages"
+        <a class="nav-link collapsed" href="{% url 'AllProd' %}" data-target="#collapsePages"
            aria-expanded="true" aria-controls="collapsePages">
             <i class="fas fa-fw fa-folder"></i>
             <span>Liste des Produits</span>
         </a> </li>
     <!-- Divider -->
-    <hr class="sidebar-divider"> {% endcomment %}
+    <hr class="sidebar-divider"> 
 
     <!-- Heading -->
     <div class="sidebar-heading">

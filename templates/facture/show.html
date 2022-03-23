@@ -47,7 +47,7 @@
       <div class="card-body">
         <a href="" class="btn btn-primary">PDF</a>
         <a href="" class="btn btn-success">EXCEL</a>
-        <a href="" class="btn btn-warning">CSV</a>
+        <a href="{% url 'exportCsv' facture.id %}" class="btn btn-warning">CSV</a>
       </div>
     </div>
     <div class="card shadow">
@@ -56,17 +56,47 @@
       </div>
       <div class="card-body">
         <form action="{% url 'show' facture.id %}" method="post" class="form-group py-3 mb-3 ">
+          {% csrf_token %}
           <label>Référence : <input type="text" name="ref_fac" class="form-control" value="{{facture.ref_fac}}"></label>
           <label>Date : <input type="text" name="date" class="form-control" value="{{facture.date}}"></label>
           <label>Total : <input type="text" name="total" class="form-control" value="{{facture.total}}"></label>
-          <p><label>Produit : <input type="text"  class="form-control" value="Produits" disabled/></label> <label> <a href="{% url 'showLprod' facture.id %}" class="btn btn-info"><i class="fas fa-arrow-right"></i></a></label></p>
-          <p><label>Fournisseur : <input type="text" class="form-control"value="{{facture.fournisseur.name}}" disabled/></label> <label> <a href="{% url 'fourprof' facture.fournisseur.id %}" class="btn btn-info"><i class="fas fa-arrow-right"></i></a></label></p>
-          <p><label>Client : <input type="text" class="form-control"value="{{facture.client.name}}" disabled/></label> <label> <a href="{% url 'cliprof' facture.client.id %}" class="btn btn-info"><i class="fas fa-arrow-right"></i></a></label></p>
-          <select class="form-control" name="status" aria-label="Default select example">
-            <option value="P">Payée</option>
-            <option value="N">Non payée</option>
-            <option value="A">Avance Donnée</option>
-          </select> 
+          <p><label>Produit : <input type="text"  class="form-control" value="Produits" disabled/></label> <label> <a href="{% url 'showLprod' facture.id %}" class="btn btn-info"><i class="fas fa-arrow-right"></i></a></label>
+            {% if p_select.count %}
+            <label>                         
+              <select class="form-control" name="produit" aria-label="Default select example" multiple>
+              <option selected value=""></option>
+              {% for p in p_select %}
+                  <option value="{{ p.id }}">{{ p.name }}</option>
+              {% endfor %}
+            </select> </label>
+            {% endif %}
+          </p>
+          <p><label>Fournisseur : <input type="text" class="form-control"value="{{facture.fournisseur.name}}" disabled/></label> <label> <a href="{% url 'fourprof' facture.fournisseur.id %}" class="btn btn-info"><i class="fas fa-arrow-right"></i></a></label>
+            <label>     
+              <select class="form-control" name="fournisseur" aria-label="Default select example">
+              <option selected value=""></option>
+              {% for fa in four_assoc %}
+                <option value="{{ fa.id }}">{{ fa.name }}</option>
+              {% endfor %}
+            </select> 
+          </label>
+          </p>
+          <p><label>Client : <input type="text" class="form-control"value="{{facture.client.name}}" disabled/></label> <label> <a href="{% url 'cliprof' facture.client.id %}" class="btn btn-info"><i class="fas fa-arrow-right"></i></a></label>
+            <label>     
+              <select class="form-control" name="client" aria-label="Default select example">
+              <option selected value=""></option>
+              {% for ca in cli_assoc %}
+                <option value="{{ ca.id }}">{{ ca.name }}</option>
+              {% endfor %}
+            </select> 
+          </label>
+          </p>
+            <select class="form-control" name="status" aria-label="Default select example">
+              <option value="{{ facture.status }}">{% if facture.status == 'P' %}Payée {% elif facture.status == 'N'%} Non Payée {% else %} Avance Donnée {% endif %}</option>
+              {% for s in status %}
+                <option value={{s}}>{% if s == 'P' %}Payée {% elif s == 'N'%} Non Payée {% else %} Avance Donnée {% endif %}</option>
+              {% endfor %}
+            </select> 
           <input type="submit" class="btn btn-primary mt-2" value="Sauvegarder"/>
         </form>
       </div>

@@ -5,6 +5,8 @@
   <title>{% block title %}Fournisseurs{% endblock %}</title>
 </head>
 <div class="container">
+    <a href="{% url 'createFour' %}" class="btn btn-primary">Ajouter Fournisseur</a>
+  <hr>
     <div class="row">
       {% for f in fournisseurs %}
         <div class="col lg-2">

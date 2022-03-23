@@ -6,7 +6,7 @@
 </head>
 <div class="container-fluid">
     <div class="row">
-        <div class="col-lg-6 mx-auto">
+        <div class="col-lg-9 mx-auto">
             <div class="card shadow mb-4">
                 <div class="card-header py-3">
                     <h6 class="m-0 font-weight-bold text-primary">Créer Facture</h6>
@@ -15,36 +15,101 @@
                     <form action="{% url 'createFacture' %}" method="POST" class="form-group">
                         {% csrf_token %}
                         <p>Facture :</p>
-                        <label>Nom : <input type="text" class="form-control mt-2" name="name" /> </label>
-                        <label>Référence :<input type="text" class="form-control mt-2" name="ref_fac" /> </label>
-                        <p> <label>Date : <input type="text" class="form-control mt-2" name="date" /> </label>
-                        <label>Total :<input type="text" class="form-control mt-2" name="total"  /> </label></p>
+                        <label>Nom : <input type="text" class="form-control mt-2" style="width: 400px;" name="name" /> </label>
+                        <label>Référence :<input type="text" class="form-control mt-2" style="width: 400px;" name="ref_fac" /> </label>
+                        <p> <label>Date : <input type="text" class="form-control mt-2" style="width: 400px;" name="date" /> </label>
+                        <label>TTC :<input type="text" class="form-control mt-2" style="width: 400px;" name="total"  /> </label></p>
                         <label>Status :
-                        <select class="form-control" name="status" aria-label="Default select example">
+                        <select class="form-control" name="status" style="width: 400px;" aria-label="Default select example">
                             <option value="P">Payée</option>
                             <option value="N">Non payée</option>
                             <option value="A">Avance Donnée</option>
                           </select> 
                         </label>
                         <hr>
-                        <p>Fournisseur :</p>
-                        <label>Nom : <input type="text" class="form-control mt-2" name="nameF" /> </label>
-                        <label>Addresse :<input type="text" class="form-control mt-2" name="addresseF" /> </label>
-                        <p> <label>Email : <input type="text" class="form-control mt-2" name="emailF" /> </label>
+                        {% if fournisseurs.count %}
+                            <select class="form-control" name="fournisseur">
+                                    <option selected value="">Fournisseur</option>
+                                {% for f in fournisseurs %}
+                                    <option value="{{ f.id }}">{{ f.name }}</option>
+                                {% endfor %}
+                            </select>
+                        {% endif %}
+                        <hr>
+                        <p>Fournisseur : <small style="color: green;">facultatif si vous avez choisi de la liste</small></p>
+                        <label>Nom : <input type="text" class="form-control mt-2" style="width: 400px;" name="nameF" /> </label>
+                        <label>Addresse :<input type="text" class="form-control mt-2" style="width: 400px;" name="addresseF" /> </label>
+                        <p> <label>Email : <input type="text" class="form-control mt-2" style="width: 400px;" name="emailF" /> </label>
                         <label>Tel :<input type="text" class="form-control mt-2" name="telF"  /> </label></p>
 
                         <hr>
-                        <p>Client :</p>
-                        <label>Nom : <input type="text" class="form-control mt-2" name="nameC" /> </label>
-                        <label>Addresse :<input type="text" class="form-control mt-2" name="addresseC" /> </label>
-                        <p> <label>Email : <input type="text" class="form-control mt-2" name="emailC" /> </label>
+                        {% if clients.count %}
+                        <select class="form-control" name="client">
+                            <option selected value="">Client</option>
+                            {% for c in clients %}
+                                <option value="{{ c.id }}">{{ c.name }}</option>
+                            {% endfor %}
+                        </select>
+                    {% endif %}
+                    <hr>
+                        <p>Client : <small style="color: green;">facultatif si vous avez choisi de la liste</small></p>
+                        <label>Nom : <input type="text" class="form-control mt-2" style="width: 400px;" name="nameC" /> </label>
+                        <label>Addresse :<input type="text" class="form-control mt-2" style="width: 400px;" name="addresseC" /> </label>
+                        <p> <label>Email : <input type="text" class="form-control mt-2" style="width: 400px;" name="emailC" /> </label>
                         <label>Tel :<input type="text" class="form-control mt-2" name="telC"  /> </label></p>
                         
-                        <input type="submit" class="btn btn-primary mt-2" value="Créer"/> 
+                        <p>Produits :</p>
+                        <table class="_table table table-responsive-xl">
+                            <thead>
+                              <tr>
+                                <th>Nom</th>
+                                <th>Prix Unité Hors Taxe</th>
+                                <th>Quantité</th>
+                                <th>TVA</th>
+                                <th>Montant</th>
+                                <th>
+                                  <div class="action_container">
+                                    <a class="btn btn-success" onclick="create_tr('table_body')">
+                                      +
+                                    </a>
+                                  </div>
+                                </th>
+                              </tr>
+                            </thead>
+                            <tbody id="table_body">
+                              
+                                  <tr>
+                                      <td>
+                                        <input type="text" class="form-control" name="nameP"/>
+                                      </td>
+                                      <td>
+                                        <input type="text" class="form-control" name="prix_u_ht"/>
+                                      </td>
+                                      <td>
+                                        <input type="text" class="form-control" name="qty"/>
+                                      </td>
+                                      <td>
+                                          <input type="text" class="form-control" name="tva"/>
+                                        </td>
+                                        <td>
+                                          <input type="text" class="form-control" name="montant"/>
+                                        </td>
+                                      <td>
+                                        <div class="action_container">
+                                          <a class="btn btn-danger" onclick="remove_tr(this)">
+                                              x
+                                          </a>
+                                        </div>
+                                      </td>
+                                    </tr>
+                            </tbody>
+                          </table>
+                        <input type="submit" class="btn btn-primary btn-block mt-2" value="Créer"/> 
                     </form>
                 </div>
             </div>
         </div>
     </div>
 </div>
+  <script src="{% static 'app/facture/generator.js' %}"></script>
 {% endblock %}

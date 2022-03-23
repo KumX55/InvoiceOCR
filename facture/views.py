@@ -1,6 +1,5 @@
 from email import message
 import imp
-from tkinter import W
 from django.utils.decorators import method_decorator
 from unicodedata import name
 from django.shortcuts import redirect, render
@@ -62,13 +61,34 @@ class showFac(View):
     def get(self, request, id):
         facture = Facture.objects.get(pk=id, owner=request.user)
         produit = Produit.objects.filter(facture=facture,owner=request.user)
-        return  render(request,'facture/show.html',{'facture':facture, "produit":produit})
+        status = ['P','N','A']
+        status.remove(facture.status)
+        four_assoc = Fournisseur.objects.filter(owner=request.user).exclude(pk=facture.fournisseur.pk)
+        cli_assoc = Client.objects.filter(owner=request.user).exclude(pk=facture.client.pk)
+        ids = []
+        for i in range(0,len(produit)):
+            ids.append(produit[i].name)
+        p_select = Produit.objects.filter(owner=request.user).exclude(name__in=ids)
+        return  render(request,'facture/show.html',{'facture':facture, "produit":produit, "status":status, "four_assoc":four_assoc, "cli_assoc":cli_assoc, 'p_select':p_select})
     def post(self, request, id):
-        facture = Facture.objects.get(pk=id)
+        id_p = request.POST.getlist('produit')
+        id_f = request.POST['fournisseur']
+        id_c = request.POST['client']
+        facture = Facture.objects.get(pk=id, owner=request.user)
         ref_fac = request.POST['ref_fac'] 
         date = request.POST['date']
         total = request.POST['total']
         status = request.POST['status']
+        if id_p:
+            for i in id_p:
+                p = Produit.objects.get(pk=i, owner=request.user)
+                facture.produit_set.add(p)
+        if id_f:
+            fournisseur = Fournisseur.objects.get(owner=request.user, pk=id_f)
+            facture.fournisseur = fournisseur
+        if id_c:
+            client = Client.objects.get(owner=request.user, pk=id_c)
+            facture.client = client
         facture.ref_fac = ref_fac
         facture.date = date
         facture.total = total
@@ -136,29 +156,39 @@ class editFac(View):
 class createFacture(View):
     @method_decorator(login_required(login_url='/authentication/login'))
     def get(self,request):
-        return render(request,'facture/create_facture.html')
+        founisseurs = Fournisseur.objects.filter(owner=request.user)
+        clients = Client.objects.filter(owner=request.user)
+        return render(request,'facture/create_facture.html',{"fournisseurs":founisseurs, "clients":clients})
     def post(self,request):
-       name = request.POST['name']
-       ref_fac = request.POST['ref_fac']
-       date = request.POST['date']
-       total = request.POST['total']
-       status = request.POST['status']
-       nameF = request.POST['nameF']
-       addresseF = request.POST['addresseF']
-       emailF = request.POST['emailF']
-       telF = request.POST['telF']
-       nameC = request.POST['nameC']
-       addresseC = request.POST['addresseC']
-       emailC = request.POST['emailC']
-       telC = request.POST['telC']
-       f = Fournisseur.objects.create(name=nameF,adress=addresseF,email=emailF,phone=telF,owner=request.user)
-       f.save()
-       c = Client.objects.create(name=nameC,adress=addresseC,email=emailC,phone=telC,owner=request.user)
-       c.save()
-       facture = Facture.objects.create(name=name,owner=request.user,ref_fac=ref_fac,date=date,total=total,status=status,fournisseur=f,client=c)
-       facture.save()
-       messages.success(request,'Facture Créé avec succès !!')
-       return redirect('historique')
+        id_f = request.POST['fournisseur']
+        id_c = request.POST['client']
+        name = request.POST['name']
+        ref_fac = request.POST['ref_fac']
+        date = request.POST['date']
+        total = request.POST['total']
+        status = request.POST['status']
+        if id_f:
+            f = Fournisseur.objects.get(pk=id_f)
+        else:
+            nameF = request.POST['nameF']
+            addresseF = request.POST['addresseF']
+            emailF = request.POST['emailF']
+            telF = request.POST['telF']
+            f = Fournisseur.objects.create(name=nameF,adress=addresseF,email=emailF,phone=telF,owner=request.user)
+            f.save()
+        if id_c:
+            c = Client.objects.get(pk=id_c)
+        else:
+            nameC = request.POST['nameC']
+            addresseC = request.POST['addresseC']
+            emailC = request.POST['emailC']
+            telC = request.POST['telC']
+            c = Client.objects.create(name=nameC,adress=addresseC,email=emailC,phone=telC,owner=request.user)
+            c.save()
+        facture = Facture.objects.create(name=name,owner=request.user,ref_fac=ref_fac,date=date,total=total,status=status,fournisseur=f,client=c)
+        facture.save()
+        messages.success(request,'Facture Créé avec succès !!')
+        return redirect('historique')
 
 # ****************************************************************************************************************** #
     # **************************************Fournisseurs Et Clients********************************************** #
@@ -367,25 +397,50 @@ class createProd(View):
         qty = request.POST['qty']
         tva = request.POST['tva']
         montant = request.POST['montant']
-        p = Produit.objects.create(name=name,prix_u_ht=prix_u_ht,qty=qty,tva=tva,montant=montant,facture=facture,owner=request.user)
+        p = Produit.objects.create(name=name,prix_u_ht=prix_u_ht,qty=qty,tva=tva,montant=montant,owner=request.user)
+        p.facture.add(facture)
         p.save()
         messages.success(request,'Produit Créé avec succès !!')
         return redirect('show', id)
 # **************************************Créer Produit********************************************** #
+class AjoutProduit(View):
+    @method_decorator(login_required(login_url='/authentication/login'))
+    def get(self,request):
+        return render(request,'produit/create_produit_sans_facture.html')
+    def post(self,request):
+        name = request.POST['name']
+        prix_u_ht = request.POST['prix_u_ht']
+        qty = request.POST['qty']
+        tva = request.POST['tva']
+        montant = request.POST['montant']
+        p = Produit.objects.create(name=name,prix_u_ht=prix_u_ht,qty=qty,tva=tva,montant=montant,owner=request.user)
+        p.save()
+        messages.success(request,'Produit Créé avec succès !!')
+        return redirect('AllProd')
+# **************************************Liste Produit********************************************** #
+@login_required(login_url='/authentication/login')
+def AllProd(request):
+    produits = Produit.objects.filter(owner=request.user)
+    return render(request,'produit/liste_produits.html',{"produits":produits})
+# **************************************Liste Produit Facture********************************************** #
 @login_required(login_url='/authentication/login')
 def listeProd(request, id):
     facture = Facture.objects.get(pk=id, owner=request.user)
-    produits = Produit.objects.filter(facture=facture, owner=request.user)
+    produits = facture.produit_set.all()
     paginator = Paginator(produits,8)
     page_number = request.GET.get('page')
     page_obj = Paginator.get_page(paginator,page_number)
     return render(request,'produit/liste_produits_facture.html',{"facture":facture, "produits":produits, "page_obj": page_obj})
-# **************************************Visualiser/Modifier Produit********************************************** #
+# **************************************Visualiser Produit********************************************** #
 class showProd(View):
     @method_decorator(login_required(login_url='/authentication/login'))
     def get(self, request, id):
         produit = Produit.objects.get(pk=id, owner=request.user)
-        return render(request, 'produit/profile_produit.html',{"produit":produit})
+        factures = produit.facture.all()
+        paginator = Paginator(factures,8)
+        page_number = request.GET.get('page')
+        page_obj = Paginator.get_page(paginator,page_number)
+        return render(request, 'produit/profile_produit.html',{"produit":produit,'factures':factures, 'page_obj': page_obj})
     def post(self, request, id):
         p = Produit.objects.get(pk=id, owner=request.user)
         name = request.POST['name']
@@ -397,7 +452,38 @@ class showProd(View):
         p.prix_u_ht = prix_u_ht
         p.qty = qty
         p.tva = tva
-        p.montantp = montant
+        p.montant = montant
+        p.save()
+        messages.success(request,'Produit Modifié avec succès !!')
+        return redirect('showProd', id)
+# **************************************Modifier Produit********************************************** #
+class editProd(View):
+    @method_decorator(login_required(login_url='/authentication/login'))
+    def get(self, request, id):
+        produit = Produit.objects.get(pk=id, owner=request.user)
+        facturesP = produit.facture.all()
+        ids = []
+        for i in range(0,len(facturesP)):
+            ids.append(facturesP[i].name)
+        factures = Facture.objects.filter(owner=request.user).exclude(name__in=ids)
+        return render(request, 'produit/edit_produit.html',{"produit":produit, "factures":factures})
+    def post(self, request, id):
+        p = Produit.objects.get(pk=id, owner=request.user)
+        id_f = request.POST.getlist('facture')
+        name = request.POST['name']
+        prix_u_ht = request.POST['prix_u_ht']
+        qty = request.POST['qty']
+        tva = request.POST['tva']
+        montant = request.POST['montant']
+        if id_f[0] != "":
+            for i in id_f:
+                facture = Facture.objects.get(owner=request.user,pk=i)
+                p.facture.add(facture)
+        p.name = name
+        p.prix_u_ht = prix_u_ht
+        p.qty = qty
+        p.tva = tva
+        p.montant = montant
         p.save()
         messages.success(request,'Produit Modifié avec succès !!')
         return redirect('showProd', id)
@@ -407,7 +493,7 @@ def deleteProd(request, id):
     produit = Produit.objects.get(pk=id, owner=request.user)
     produit.delete()
     messages.success(request,'Produit Supprimé avec succès !!')
-    return redirect("home")
+    return redirect("AllProd")
 # **************************************Supprimer Produits********************************************** #
 @login_required(login_url='/authentication/login')
 def deleteAllProd(request, id):
@@ -416,13 +502,21 @@ def deleteAllProd(request, id):
     produits.delete()
     messages.success(request,'Produits Supprimés avec succès !!')
     return redirect("show", id)
+# **************************************Détacher Facture du Produit********************************************** #
+def removeFacProd(request, idf, idp):
+        f = Facture.objects.get(pk=idf, owner=request.user)
+        produit = Produit.objects.get(pk=idp, owner=request.user)
+        produit.facture.remove(f)
+        #f.produit_set.remove(produit)
+        messages.success(request,'Facture détachée avec succès !! ')
+        return redirect('showProd', idp)
 
 # ****************************************************************************************************** #
 # *****************************************Export CSV*************************************************** #
 def export_facture_csv(request,id):
     facture = Facture.objects.get(pk=id, owner=request.user)
     response = HttpResponse(content_type='text/csv')
-    response['Content-Disposition'] = 'attachment; filename=Facture'+facture.name+'_'+facture.creation_date+'.csv'
+    response['Content-Disposition'] = 'attachment; filename=Facture'+facture.name+'_'+str(facture.creation_date)+'.csv'
     
     writer = csv.writer(response)
     writer.writerow(['Nom', 'Référence', 'Date', 'Total', 'Status', 
@@ -433,8 +527,8 @@ def export_facture_csv(request,id):
     produits = Produit.objects.filter(facture=facture, owner=request.user)
 
     writer.writerow([facture.name, facture.ref_fac, facture.date, facture.total, facture.status, 
-                     facture.fournisseur.name,facture.fournisseuradress,facture.fournisseuremail,facture.fournisseurphone,
-                     facture.client.name,facture.clientadress,facture.clientemail,facture.clientphone,
+                     facture.fournisseur.name,facture.fournisseur.adress,facture.fournisseur.email,facture.fournisseur.phone,
+                     facture.client.name,facture.client.adress,facture.client.email,facture.client.phone,
                      produits[0].name,produits[0].prix_u_ht,produits[0].qty,produits[0].tva,produits[0].montant,])
     
     produits = produits[1:]

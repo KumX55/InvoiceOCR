@@ -57,8 +57,8 @@ class Produit(models.Model):
     qty = models.IntegerField(null=True)
     tva = models.CharField(max_length=255, null=True)
     montant = models.IntegerField(null=True)
-    facture = models.ForeignKey(to=Facture,on_delete=models.CASCADE)
-    owner = models.ForeignKey(to=User, on_delete=models.CASCADE)
+    facture = models.ManyToManyField(Facture)
+    owner = models.ForeignKey(to=User, null=True,on_delete=models.CASCADE)
     class Meta:
         ordering = ['-pk']
 
