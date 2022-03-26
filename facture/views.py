@@ -1,5 +1,6 @@
 from email import message
 import imp
+from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 from unicodedata import name
 from django.shortcuts import redirect, render
@@ -79,7 +80,7 @@ class showFac(View):
         date = request.POST['date']
         total = request.POST['total']
         status = request.POST['status']
-        if id_p:
+        if id_p[0] != "":
             for i in id_p:
                 p = Produit.objects.get(pk=i, owner=request.user)
                 facture.produit_set.add(p)
@@ -160,6 +161,7 @@ class createFacture(View):
         clients = Client.objects.filter(owner=request.user)
         return render(request,'facture/create_facture.html',{"fournisseurs":founisseurs, "clients":clients})
     def post(self,request):
+        jsonStr = request.POST['jsonTable']
         id_f = request.POST['fournisseur']
         id_c = request.POST['client']
         name = request.POST['name']
@@ -187,7 +189,12 @@ class createFacture(View):
             c.save()
         facture = Facture.objects.create(name=name,owner=request.user,ref_fac=ref_fac,date=date,total=total,status=status,fournisseur=f,client=c)
         facture.save()
-        messages.success(request,'Facture Créé avec succès !!')
+        prodList = json.loads(jsonStr)
+        for l in range(0,len(prodList)):
+            p = Produit.objects.create(name=prodList[l]['nom'],prix_u_ht=prodList[l]['prixunitairehorstaxe'],qty=prodList[l]['quantité'],tva=prodList[l]['tva'],montant=prodList[l]['montant'],owner=request.user)
+            p.facture.add(facture)
+            p.save()
+        messages.success(request,'Facture Créé avec Succès !!')
         return redirect('historique')
 
 # ****************************************************************************************************************** #
@@ -522,7 +529,7 @@ def export_facture_csv(request,id):
     writer.writerow(['Nom', 'Référence', 'Date', 'Total', 'Status', 
                      'Nom Fournisseur','Addresse Fournisseur','Email Fournisseur','Tel Fournisseur',
                      'Nom Client','Addresse Client','Email Client','Tel Client',
-                     'Nom Produit','Prix Unité Hors Taxi','Quantité','TVA','Montant',])
+                     'Nom Produit','Prix Unitaire Hors Taxe','Quantité','TVA','Montant',])
     
     produits = Produit.objects.filter(facture=facture, owner=request.user)
 
@@ -554,7 +561,7 @@ def export_facture_excel(request,id):
     columns = ['Nom', 'Référence', 'Date', 'Total', 'Status', 
                'Nom Fournisseur','Addresse Fournisseur','Email Fournisseur','Tel Fournisseur',
                'Nom Client','Addresse Client','Email Client','Tel Client',
-               'Nom Produit','Prix Unité Hors Taxi','Quantité','TVA','Montant',]
+               'Nom Produit','Prix Unitaire Hors Taxe','Quantité','TVA','Montant',]
     
     for  col_num in range(len(columns)):
         ws.wrtie(row_num, col_num, columns[col_num], font_style)

@@ -39,6 +39,6 @@ urlpatterns = [
     path('deleteClient/<id>',csrf_exempt(views.deleteClient),name="deletecli"),
     path('deleteFacturesFournisseur/<id>',csrf_exempt(views.deleteFacturesFournisseur),name="deletefacfour"),
     path('deleteFacturesFournisseur/<id>',csrf_exempt(views.deleteFacturesClient),name="deletefaccli"),
-    path('modifier/<id>',csrf_exempt(editFac.as_view()),name="edit") 
+    path('modifier/<id>',csrf_exempt(editFac.as_view()),name="edit")
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

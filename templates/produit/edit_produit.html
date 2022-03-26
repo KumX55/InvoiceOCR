@@ -15,7 +15,7 @@
                      <form action="{% url 'editProd' produit.id %}" method="POST" class="form-group">
                          {% csrf_token %}
                          <p>Nom : <input type="text" class="form-control mt-2" name="name" value="{{produit.name}}" /> </p>
-                         <p>Prix Unité Hors Taxe : <input type="text" class="form-control mt-2" name="prix_u_ht" value="{{produit.prix_u_ht}}"/> </p>
+                         <p>Prix Unitaire Hors Taxe : <input type="text" class="form-control mt-2" name="prix_u_ht" value="{{produit.prix_u_ht}}"/> </p>
                          <p>Quantité :<input type="text" class="form-control mt-2" name="qty" value="{{produit.qty}}" /> </p>
                          <p>TVA :<input type="text" class="form-control mt-2" name="tva"  value="{{produit.tva}}"/> </p>
                          <p>Montant :<input type="text" class="form-control mt-2" name="montant"  value="{{produit.montant}}"/> </p>

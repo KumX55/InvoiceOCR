@@ -15,7 +15,7 @@
                     <form action="{% url 'createFacture' %}" method="POST" class="form-group">
                         {% csrf_token %}
                         <p>Facture :</p>
-                        <label>Nom : <input type="text" class="form-control mt-2" style="width: 400px;" name="name" /> </label>
+                        <label>Nom : <input type="text" class="form-control mt-2" style="width: 400px;" name="name"/> </label>
                         <label>Référence :<input type="text" class="form-control mt-2" style="width: 400px;" name="ref_fac" /> </label>
                         <p> <label>Date : <input type="text" class="form-control mt-2" style="width: 400px;" name="date" /> </label>
                         <label>TTC :<input type="text" class="form-control mt-2" style="width: 400px;" name="total"  /> </label></p>
@@ -57,23 +57,19 @@
                         <label>Addresse :<input type="text" class="form-control mt-2" style="width: 400px;" name="addresseC" /> </label>
                         <p> <label>Email : <input type="text" class="form-control mt-2" style="width: 400px;" name="emailC" /> </label>
                         <label>Tel :<input type="text" class="form-control mt-2" name="telC"  /> </label></p>
-                        
+                        <input type="text" class="form-control mt-2" name="jsonTable" id="jsonTable" hidden/>
                         <p>Produits :</p>
-                        <table class="_table table table-responsive-xl">
+                        <table class="_table table table-responsive-xl" id="prod_tab">
                             <thead>
                               <tr>
                                 <th>Nom</th>
-                                <th>Prix Unité Hors Taxe</th>
+                                <th>Prix Unitaire Hors Taxe</th>
                                 <th>Quantité</th>
                                 <th>TVA</th>
                                 <th>Montant</th>
-                                <th>
-                                  <div class="action_container">
-                                    <a class="btn btn-success" onclick="create_tr('table_body')">
-                                      +
-                                    </a>
-                                  </div>
-                                </th>
+                             <!--<th>
+
+                                </th>-->   
                               </tr>
                             </thead>
                             <tbody id="table_body">
@@ -94,17 +90,22 @@
                                         <td>
                                           <input type="text" class="form-control" name="montant"/>
                                         </td>
-                                      <td>
+                                      <!--<td>
                                         <div class="action_container">
                                           <a class="btn btn-danger" onclick="remove_tr(this)">
                                               x
                                           </a>
                                         </div>
-                                      </td>
+                                      </td>-->
                                     </tr>
                             </tbody>
                           </table>
-                        <input type="submit" class="btn btn-primary btn-block mt-2" value="Créer"/> 
+                          <div class="action_container">
+                            <a class="btn btn-success float-right mb-2 mt-0" onclick="create_tr('table_body')">
+                              +
+                            </a>
+                          </div>
+                        <input type="submit" class="btn btn-primary btn-block mt-2" onClick="sendJson()" value="Créer"/> 
                     </form>
                 </div>
             </div>
@@ -112,4 +113,5 @@
     </div>
 </div>
   <script src="{% static 'app/facture/generator.js' %}"></script>
+  <script src="{% static 'app/facture/html_to_json.js' %}"></script>
 {% endblock %}

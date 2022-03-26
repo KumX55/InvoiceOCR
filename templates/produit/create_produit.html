@@ -15,7 +15,7 @@
                     <form action="{% url 'createProd' facture.id %}" method="POST" class="form-group">
                         {% csrf_token %}
                         <p>Nom : <input type="text" class="form-control mt-2" name="name" /> </p>
-                        <p>Prix unité hors taxe : <input type="text" class="form-control mt-2" name="prix_u_ht" /> </p>
+                        <p>Prix unitaire hors taxe : <input type="text" class="form-control mt-2" name="prix_u_ht" /> </p>
                         <p>Qantité :<input type="text" class="form-control mt-2" name="qty"  /> </p>
                         <p>TVA :<input type="text" class="form-control mt-2" name="tva"  /> </p>
                         <p>Montant :<input type="text" class="form-control mt-2" name="montant"  /> </p>

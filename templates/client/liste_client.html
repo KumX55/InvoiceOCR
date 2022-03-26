@@ -5,7 +5,7 @@
   <title>{% block title %}Clients{% endblock %}</title>
 </head>
 <div class="container">
-  <a href="{% url 'clilist' %}" class="btn btn-primary">Ajouter Client</a>
+  <a href="{% url 'createCli' %}" class="btn btn-primary">Ajouter Client</a>
   <hr>
     <div class="row">
       {% for c in clients %}
