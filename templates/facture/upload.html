@@ -6,7 +6,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
-  <link rel="stylesheet" href="{% static 'app/facture/style.css'%}">
+  <link rel="stylesheet" href="{% static 'app/facture/Fstyle.css'%}">
   <link href='https://fonts.googleapis.com/css?family=Roboto:400,100,300,700' rel='stylesheet' type='text/css'>
   <style>
   .titi:hover {
@@ -230,7 +230,7 @@
                       {% csrf_token %}
                       <input class="file-input" type="file" name="factures" multiple hidden/>
                       <img class="jss301" src="https://cdn.nanonets.com/media/invoice.svg" alt="">
-                      <p>Importer votre facture</p>
+                      <p class="importer">Importer votre facture</p>
                       <input type="submit" class="btn btn-outline-info" value="upload" hidden/>
                     </form>
                     <section class="progress-area"></section>

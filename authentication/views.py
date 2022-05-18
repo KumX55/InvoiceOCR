@@ -144,7 +144,6 @@ class LogoutView(View):
 
 # **************************************Mot de passe Oublié********************************************** #
 class RequestPasswordView(View):
-    @method_decorator(login_required(login_url='/authentication/login'))
     def get(self, request):
         return render(request,'authentication/reset-password.html')
     def post(self, request):

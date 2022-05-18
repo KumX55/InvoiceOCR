@@ -58,7 +58,7 @@
         <form action="{% url 'show' facture.id %}" method="post" class="form-group py-3 mb-3 ">
           {% csrf_token %}
           <label>Référence : <input type="text" name="ref_fac" class="form-control" value="{{facture.ref_fac}}"></label>
-          <label>Date : <input type="text" name="date" class="form-control" value="{{facture.date}}"></label>
+          <label>Date : <input type="date" name="date" class="form-control" value="{{facture.date}}"></label>
           <label>Total : <input type="text" name="total" class="form-control" value="{{facture.total}}"></label>
           <p><label>Produit : <input type="text"  class="form-control" value="Produits" disabled/></label> <label> <a href="{% url 'showLprod' facture.id %}" class="btn btn-info"><i class="fas fa-arrow-right"></i></a></label>
             {% if p_select.count %}
@@ -71,26 +71,51 @@
             </select> </label>
             {% endif %}
           </p>
-          <p><label>Fournisseur : <input type="text" class="form-control"value="{{facture.fournisseur.name}}" disabled/></label> <label> <a href="{% url 'fourprof' facture.fournisseur.id %}" class="btn btn-info"><i class="fas fa-arrow-right"></i></a></label>
-            <label>     
-              <select class="form-control" name="fournisseur" aria-label="Default select example">
-              <option selected value=""></option>
-              {% for fa in four_assoc %}
-                <option value="{{ fa.id }}">{{ fa.name }}</option>
-              {% endfor %}
-            </select> 
-          </label>
-          </p>
-          <p><label>Client : <input type="text" class="form-control"value="{{facture.client.name}}" disabled/></label> <label> <a href="{% url 'cliprof' facture.client.id %}" class="btn btn-info"><i class="fas fa-arrow-right"></i></a></label>
-            <label>     
+
+          {% if facture.fournisseur or four_assoc %}
+              <p>
+                <label>Fournisseur : 
+                  <select class="form-control" name="fournisseur" aria-label="Default select example">
+                    {% if facture.fournisseur %}
+                        <option selected value="{{ facture.fournisseur.id }}" disabled>{{ facture.fournisseur.name }}</option>
+                    {% else %}
+                    <option selected value=""></option>
+                    {% endif %}
+                  {% if four_assoc %}
+                    {% for fa in four_assoc %}
+                      <option value="{{ fa.id }}">{{ fa.name }}</option>
+                    {% endfor %}
+                    {% endif %}
+                  </select>
+                  </label>
+                    {% if facture.fournisseur %}
+                      <label> <a href="{% url 'fourprof' facture.fournisseur.id %}" class="btn btn-info"><i class="fas fa-arrow-right"></i></a></label>
+                    {% endif %}
+              </p>
+          {% endif %}
+
+
+          {% if facture.client or cli_assoc %}
+          <p><label>Client : 
+            {% comment %} <input type="text" class="form-control"value="{{facture.client.name}}" disabled/></label> 
+            <label>      {% endcomment %}
               <select class="form-control" name="client" aria-label="Default select example">
-              <option selected value=""></option>
-              {% for ca in cli_assoc %}
+                {% if facture.client %}
+                  <option selected value="{{facture.client.id}}" disabled>{{facture.client.name}}</option>
+                  {% else %}
+                  <option selected value=""></option>
+                {% endif %}
+                {% if cli_assoc %}
+                {% for ca in cli_assoc %}
                 <option value="{{ ca.id }}">{{ ca.name }}</option>
               {% endfor %}
+                {% endif %}
             </select> 
-          </label>
-          </p>
+            {% if facture.client %}
+          </label> <label> <a href="{% url 'cliprof' facture.client.id %}" class="btn btn-info"><i class="fas fa-arrow-right"></i></a></label>
+          {% endif %} 
+        </p>
+          {% endif %}
             <select class="form-control" name="status" aria-label="Default select example">
               <option value="{{ facture.status }}">{% if facture.status == 'P' %}Payée {% elif facture.status == 'N'%} Non Payée {% else %} Avance Donnée {% endif %}</option>
               {% for s in status %}

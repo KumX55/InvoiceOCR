@@ -1,17 +1,21 @@
 from os import name
 from django.urls import path
 from . import views
-from .views import editFac, editFournisseur, editClient, createFour , createCli, createFacture, createProd, showFac, showProd, editProd, AjoutProduit
+from .views import editFac,upload ,editFournisseur, editClient, createFour , createCli, createFacture, createProd, showFac, showProd, editProd, AjoutProduit
 from django.conf import settings
 from django.conf.urls.static import static
 from django.views.decorators.csrf import csrf_exempt
 
 urlpatterns = [
     path('search-factures',csrf_exempt(views.search_factures),name="search-factures"),
-    path('upload',csrf_exempt(views.upload),name="home"),
+    path('upload',csrf_exempt(upload.as_view()),name="home"),
     path('historique',csrf_exempt(views.history),name="historique"),
     path('show/<id>',csrf_exempt(showFac.as_view()),name="show"),
     path('exporter_facture_csv/<id>',csrf_exempt(views.export_facture_csv),name="exportCsv"),
+    path('exporter_factures_csv',csrf_exempt(views.export_factures_csv),name="exportAllCsv"),
+    path('exporter_fournisseurs_csv',csrf_exempt(views.export_fournisseurs_csv),name="exportAllFourCsv"),
+    path('exporter_clients_csv',csrf_exempt(views.export_clients_csv),name="exportAllCliCsv"),
+    path('exporter_produits_csv',csrf_exempt(views.export_produits_csv),name="exportAllProdCsv"),
     path('show_produits/<id>',csrf_exempt(views.listeProd),name="showLprod"),
     path('show_produit/<id>',csrf_exempt(showProd.as_view()),name="showProd"),
     path('ajout_produit',csrf_exempt(AjoutProduit.as_view()),name="AjoutProduit"),

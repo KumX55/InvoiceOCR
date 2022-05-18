@@ -19,12 +19,13 @@
                          <p>Quantité :<input type="text" class="form-control mt-2" name="qty" value="{{produit.qty}}" /> </p>
                          <p>TVA :<input type="text" class="form-control mt-2" name="tva"  value="{{produit.tva}}"/> </p>
                          <p>Montant :<input type="text" class="form-control mt-2" name="montant"  value="{{produit.montant}}"/> </p>
-                         <select class="form-control" name="facture" aria-label="Default select example" multiple>
-                            <option selected value=""></option>
-                            {% for f in factures %}
-                                <option value="{{ f.id }}">{{ f.name }}</option>
-                            {% endfor %}
-                          </select> 
+                        <p>Factures:
+                            <select class="form-control" name="facture" aria-label="Default select example" multiple>
+                                <option selected value=""></option>
+                                {% for f in factures %}
+                                    <option value="{{ f.id }}">{{ f.name }}</option>
+                                {% endfor %}
+                              </select> </p>
                          <input type="submit" class="btn btn-primary mt-2" value="Sauvegarder"/> 
                          <a class="btn btn-danger float-right mt-2" href="#" data-toggle="modal" data-target="#delcomModal">Supprimer Produit</a>
                      </form>

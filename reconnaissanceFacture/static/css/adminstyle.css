@@ -1,0 +1,30 @@
+#header {
+    
+    background-color: rgb(0, 92, 173);
+    color: rgb(255, 255, 255);
+    overflow: hidden;
+}
+
+div.breadcrumbs {
+    background-color: rgba(96, 179, 252, 0.849);
+}
+.module caption, .inline-group h2 {
+    font-size: 12px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+.module h2, .module caption, .inline-group h2 {
+    background-color: rgba(96, 179, 252, 0.849);
+}
+
+.submit-row input, a.button {
+    background: rgb(0, 92, 173);
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    color: var(--button-fg);
+    cursor: pointer;
+  }
+#nav-sidebar {
+    margin-top: 20px;
+  }

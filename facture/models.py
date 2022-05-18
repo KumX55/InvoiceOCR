@@ -15,6 +15,8 @@ class Fournisseur(models.Model):
     email = models.CharField(max_length=255, null=True)
     phone = models.CharField(max_length=255, null=True)
     owner = models.ForeignKey(to=User, on_delete=models.CASCADE)
+    def __str__(self):
+        return self.name
     class Meta:
         ordering = ['-pk']
 
@@ -26,6 +28,8 @@ class Client(models.Model):
     email = models.CharField(max_length=255, null=True)
     phone = models.CharField(max_length=255, null=True)
     owner = models.ForeignKey(to=User, on_delete=models.CASCADE)
+    def __str__(self):
+        return self.name
     class Meta:
         ordering = ['-pk']
 
@@ -43,7 +47,7 @@ class Facture(models.Model):
     ref_fac = models.CharField(max_length=255, null=True)
     date = models.CharField(max_length=255, null=True)
     total = models.CharField(max_length=255, null=True)
-    status = models.CharField(max_length=1, null=True, choices=FACTURE_STATUS)
+    status = models.CharField(max_length=1, null=True, choices=FACTURE_STATUS, default='P')
     fournisseur = models.ForeignKey(to=Fournisseur, null=True, on_delete=models.CASCADE)
     client = models.ForeignKey(to=Client, null=True, on_delete=models.CASCADE)
     class Meta:
@@ -59,6 +63,8 @@ class Produit(models.Model):
     montant = models.IntegerField(null=True)
     facture = models.ManyToManyField(Facture)
     owner = models.ForeignKey(to=User, null=True,on_delete=models.CASCADE)
+    def __str__(self):
+        return self.name    
     class Meta:
         ordering = ['-pk']
 

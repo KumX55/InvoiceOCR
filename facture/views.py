@@ -6,9 +6,10 @@ from unicodedata import name
 from django.shortcuts import redirect, render
 from django.contrib import messages
 from django.views import View
+from matplotlib.pyplot import get
 from numpy import NaN
 from django.core.mail import EmailMessage
-
+from django.utils.timezone import now
 from .models import Facture, Fournisseur, Client, Produit
 from datetime import datetime
 from django.utils import timezone
@@ -19,6 +20,9 @@ from django.http import HttpResponse, JsonResponse
 from django.contrib.auth.decorators import login_required
 import csv
 import xlwt
+from .encryption_utils import encrypt, decrypt
+from .predictions import prediction
+import re
 
 # ****************************************************************************************************************** #
     # **************************************Factures********************************************** #
@@ -33,29 +37,21 @@ def search_factures(request):
         return JsonResponse(list(data),safe=False)
 
 # **************************************Importer Facture********************************************** #
-@login_required(login_url='/authentication/login')
-def upload(request):
-    # if request.method == 'GET':
-    #     f = Fournisseur.objects.create(name="Wiki",adress="03 rue Beji matrix",email="Wiki@gmail.com",phone="98030303",owner=request.user)
-    #     f.save()
-    #     c = Client.objects.create(name="Wiki matrix 2",adress="03 rue Taher hadded",email="Icon@gmail.com",phone="54245862",owner=request.user)
-    #     c.save()
-    #     facture = Facture.objects.create(name="Deuxième Facture",owner=request.user,ref_fac="F-889-R652",date="25/06/2022",total="8500TND",status="P",fournisseur=f,client=c)
-    #     facture.save()
-    #     p1 = Produit.objects.create(name="Gun M16",prix_u_ht=6756,qty=1,tva="10%",montant=6349,facture=facture,owner=request.user)
-    #     p1.save()
-    #     p2 = Produit.objects.create(name="Dell G15",prix_u_ht=6875,qty=1,tva="15%",montant=8220,facture=facture,owner=request.user)
-    #     p2.save()
-    if request.method == 'POST':
+class upload(View):
+    @method_decorator(login_required(login_url='/authentication/login'))
+    def get(self, request):
+        factures = Facture.objects.filter(owner=request.user,creation_date=datetime.now().date())
+        paginator = Paginator(factures,4)
+        page_number = request.GET.get('page')
+        page_obj = Paginator.get_page(paginator,page_number)
+        # print(prediction('/home/kumx55/Desktop/OCR-PFE/OCR-DJANGO/factures/0.jpg'))
+        return render(request,'facture/upload.html',{'factures':factures, 'page_obj': page_obj})
+    def post(self, request):
         factures = request.FILES.getlist('factures')
         for f in factures:
-            Facture.objects.create(files=f,name=f.name,owner=request.user)
-    factures = Facture.objects.filter(owner=request.user,creation_date=datetime.now().date())
-    paginator = Paginator(factures,4)
-    page_number = request.GET.get('page')
-    page_obj = Paginator.get_page(paginator,page_number)
-    return render(request,'facture/upload.html',{'factures':factures, 'page_obj': page_obj})
-
+            fac = Facture.objects.create(files=f,name=f.name,owner=request.user) 
+            fac.save()
+        return render(request,'facture/upload.html')
 # **************************************Visualiser Facture********************************************** #
 class showFac(View):
     @method_decorator(login_required(login_url='/authentication/login'))
@@ -63,33 +59,51 @@ class showFac(View):
         facture = Facture.objects.get(pk=id, owner=request.user)
         produit = Produit.objects.filter(facture=facture,owner=request.user)
         status = ['P','N','A']
-        status.remove(facture.status)
-        four_assoc = Fournisseur.objects.filter(owner=request.user).exclude(pk=facture.fournisseur.pk)
-        cli_assoc = Client.objects.filter(owner=request.user).exclude(pk=facture.client.pk)
+        if facture.status:
+            status.remove(facture.status)
+        try:
+            four_assoc = Fournisseur.objects.filter(owner=request.user).exclude(pk=facture.fournisseur.pk)
+        except:
+            four_assoc = Fournisseur.objects.filter(owner=request.user)
+        try:
+            cli_assoc = Client.objects.filter(owner=request.user).exclude(pk=facture.client.pk)
+        except:
+            cli_assoc = Client.objects.filter(owner=request.user)
         ids = []
         for i in range(0,len(produit)):
             ids.append(produit[i].name)
         p_select = Produit.objects.filter(owner=request.user).exclude(name__in=ids)
         return  render(request,'facture/show.html',{'facture':facture, "produit":produit, "status":status, "four_assoc":four_assoc, "cli_assoc":cli_assoc, 'p_select':p_select})
     def post(self, request, id):
-        id_p = request.POST.getlist('produit')
-        id_f = request.POST['fournisseur']
-        id_c = request.POST['client']
         facture = Facture.objects.get(pk=id, owner=request.user)
+        try:
+            id_p = request.POST.getlist('produit')
+            if id_p[0] != "":
+                for i in id_p:
+                    p = Produit.objects.get(pk=i, owner=request.user)
+                    facture.produit_set.add(p)
+        except:
+            pass
+        try:
+            id_f = request.POST['fournisseur']
+            fournisseur = Fournisseur.objects.get(owner=request.user, pk=id_f)
+            facture.fournisseur = fournisseur
+        except:
+            pass
+        try:
+            id_c = request.POST['client']
+            client = Client.objects.get(owner=request.user, pk=id_c)
+            facture.client = client
+        except:
+            pass
         ref_fac = request.POST['ref_fac'] 
         date = request.POST['date']
         total = request.POST['total']
         status = request.POST['status']
-        if id_p[0] != "":
-            for i in id_p:
-                p = Produit.objects.get(pk=i, owner=request.user)
-                facture.produit_set.add(p)
-        if id_f:
-            fournisseur = Fournisseur.objects.get(owner=request.user, pk=id_f)
-            facture.fournisseur = fournisseur
-        if id_c:
-            client = Client.objects.get(owner=request.user, pk=id_c)
-            facture.client = client
+        # if id_p[0] != "":
+        #     for i in id_p:
+        #         p = Produit.objects.get(pk=i, owner=request.user)
+        #         facture.produit_set.add(p)
         facture.ref_fac = ref_fac
         facture.date = date
         facture.total = total
@@ -162,25 +176,27 @@ class createFacture(View):
         return render(request,'facture/create_facture.html',{"fournisseurs":founisseurs, "clients":clients})
     def post(self,request):
         jsonStr = request.POST['jsonTable']
-        id_f = request.POST['fournisseur']
-        id_c = request.POST['client']
+        
+        
         name = request.POST['name']
         ref_fac = request.POST['ref_fac']
         date = request.POST['date']
         total = request.POST['total']
         status = request.POST['status']
-        if id_f:
+        try:
+            id_f = request.POST['fournisseur']
             f = Fournisseur.objects.get(pk=id_f)
-        else:
+        except:
             nameF = request.POST['nameF']
             addresseF = request.POST['addresseF']
             emailF = request.POST['emailF']
             telF = request.POST['telF']
             f = Fournisseur.objects.create(name=nameF,adress=addresseF,email=emailF,phone=telF,owner=request.user)
             f.save()
-        if id_c:
+        try:
+            id_c = request.POST['client']
             c = Client.objects.get(pk=id_c)
-        else:
+        except:
             nameC = request.POST['nameC']
             addresseC = request.POST['addresseC']
             emailC = request.POST['emailC']
@@ -207,14 +223,17 @@ class createFacture(View):
 @login_required(login_url='/authentication/login')
 def listeFournisseurs(request):
     fournisseurs = Fournisseur.objects.filter(owner=request.user)
-    return render(request,'fournisseur/liste_fournisseurs.html',{"fournisseurs":fournisseurs})
+    paginator = Paginator(fournisseurs,8)
+    page_number = request.GET.get('page')
+    page_obj = Paginator.get_page(paginator,page_number)
+    return render(request,'fournisseur/liste_fournisseurs.html',{"fournisseurs":fournisseurs , 'page_obj':page_obj})
 
 # **************************************Profile Fournisseur********************************************** #
 @login_required(login_url='/authentication/login')
 def profileFournisseur(request,id): 
     fournisseur = Fournisseur.objects.get(pk=id, owner=request.user)
     factures = Facture.objects.filter(fournisseur=fournisseur,owner=request.user)
-    paginator = Paginator(factures,8)
+    paginator = Paginator(factures,6)
     page_number = request.GET.get('page')
     page_obj = Paginator.get_page(paginator,page_number)
     return render(request,'fournisseur/profile_fournisseur.html',{"fournisseur":fournisseur, "factures":factures, 'page_obj': page_obj})
@@ -281,14 +300,17 @@ class editFournisseur(View):
 @login_required(login_url='/authentication/login')
 def listeClients(request):
     clients = Client.objects.filter(owner=request.user)
-    return render(request,'client/liste_client.html',{"clients":clients})
+    paginator = Paginator(clients,8)
+    page_number = request.GET.get('page')
+    page_obj = Paginator.get_page(paginator,page_number)
+    return render(request,'client/liste_client.html',{"clients":clients, 'page_obj':page_obj})
 
 # **************************************Profile Client********************************************** #
 @login_required(login_url='/authentication/login')
 def profileClient(request,id):
     client = Client.objects.get(pk=id, owner=request.user)
     factures = Facture.objects.filter(client=client,owner=request.user)
-    paginator = Paginator(factures,8)
+    paginator = Paginator(factures,6)
     page_number = request.GET.get('page')
     page_obj = Paginator.get_page(paginator,page_number)
     return render(request,'client/profile_client.html',{"client":client, "factures":factures, 'page_obj': page_obj})
@@ -428,13 +450,16 @@ class AjoutProduit(View):
 @login_required(login_url='/authentication/login')
 def AllProd(request):
     produits = Produit.objects.filter(owner=request.user)
-    return render(request,'produit/liste_produits.html',{"produits":produits})
+    paginator = Paginator(produits,8)
+    page_number = request.GET.get('page')
+    page_obj = Paginator.get_page(paginator,page_number)
+    return render(request,'produit/liste_produits.html',{"produits":produits, 'page_obj':page_obj})
 # **************************************Liste Produit Facture********************************************** #
 @login_required(login_url='/authentication/login')
 def listeProd(request, id):
     facture = Facture.objects.get(pk=id, owner=request.user)
     produits = facture.produit_set.all()
-    paginator = Paginator(produits,8)
+    paginator = Paginator(produits,6)
     page_number = request.GET.get('page')
     page_obj = Paginator.get_page(paginator,page_number)
     return render(request,'produit/liste_produits_facture.html',{"facture":facture, "produits":produits, "page_obj": page_obj})
@@ -444,7 +469,7 @@ class showProd(View):
     def get(self, request, id):
         produit = Produit.objects.get(pk=id, owner=request.user)
         factures = produit.facture.all()
-        paginator = Paginator(factures,8)
+        paginator = Paginator(factures,6)
         page_number = request.GET.get('page')
         page_obj = Paginator.get_page(paginator,page_number)
         return render(request, 'produit/profile_produit.html',{"produit":produit,'factures':factures, 'page_obj': page_obj})
@@ -568,4 +593,74 @@ def export_facture_excel(request,id):
 
     rows = facture.values_list()
 
+    return response
+
+
+def export_factures_csv(request):
+    factures = Facture.objects.filter(owner=request.user)
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename=Facture Tous_les_factures'+str(now)+'.csv'
+    
+    writer = csv.writer(response)
+    writer.writerow(['Nom', 'Référence', 'Date', 'Total', 'Status', 
+                     'Nom Fournisseur','Addresse Fournisseur','Email Fournisseur','Tel Fournisseur',
+                     'Nom Client','Addresse Client','Email Client','Tel Client',
+                     'Nom Produit','Prix Unitaire Hors Taxe','Quantité','TVA','Montant',])
+    
+    for facture in factures:
+            produits = Produit.objects.filter(facture=facture, owner=request.user)
+
+            if produits:
+                writer.writerow([facture.name, facture.ref_fac, facture.date, facture.total, facture.status, 
+                facture.fournisseur.name,facture.fournisseur.adress,facture.fournisseur.email,facture.fournisseur.phone,
+                facture.client.name,facture.client.adress,facture.client.email,facture.client.phone,
+                produits[0].name,produits[0].prix_u_ht,produits[0].qty,produits[0].tva,produits[0].montant,])
+            else:
+                writer.writerow([facture.name, facture.ref_fac, facture.date, facture.total, facture.status, 
+                facture.fournisseur.name,facture.fournisseur.adress,facture.fournisseur.email,facture.fournisseur.phone,
+                facture.client.name,facture.client.adress,facture.client.email,facture.client.phone,
+                '','','','','',])
+            produits = produits[1:]
+
+            for produit in produits:
+                writer.writerow(['', '', '', '', '', 
+                                '','','','',
+                                '','','','',
+                                produit.name,produit.prix_u_ht,produit.qty,produit.tva,produit.montant,])
+    return response
+
+def export_fournisseurs_csv(request):
+    fournisseurs = Fournisseur.objects.filter(owner=request.user)
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename=Fournisseur Tous_les_fournisseurs'+str(now)+'.csv'
+    
+    writer = csv.writer(response)
+    writer.writerow(['Nom', 'Addresse', 'Email', 'Phone'])
+    
+    for fournisseur in fournisseurs:
+                writer.writerow([fournisseur.name, fournisseur.adress, fournisseur.email, fournisseur.phone])
+    return response
+ 
+def export_clients_csv(request):
+    clients = Client.objects.filter(owner=request.user)
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename=Client Tous_les_clients'+str(now)+'.csv'
+    
+    writer = csv.writer(response)
+    writer.writerow(['Nom', 'Addresse', 'Email', 'Phone'])
+    
+    for client in clients:
+                writer.writerow([client.name, client.adress, client.email, client.phone])
+    return response
+
+def export_produits_csv(request):
+    produits = Produit.objects.filter(owner=request.user)
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename=Produit Tous_les_produits'+str(now)+'.csv'
+    
+    writer = csv.writer(response)
+    writer.writerow(['Nom', 'Prix Unitaire hors taxe', 'Quanit', 'TVA', 'Montant'])
+    
+    for produit in produits:
+                writer.writerow([produit.name, produit.prix_u_ht, produit.qty, produit.tva, produit.montant])
     return response

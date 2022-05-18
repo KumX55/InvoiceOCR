@@ -1,0 +1,20 @@
+{% extends 'admin/base.html' %}
+{% load static %}
+{% block branding %}
+
+
+<h1 id="head">
+    <a href="/admin">
+    <img src="{% static 'home/img/invoice.svg'%}" width="25px" height="25px"/>
+    RecFac-Admin
+    </a>
+</h1>
+
+
+{% endblock  %}
+
+{% block extrastyle %}
+
+    <link rel="stylesheet" href="{% static 'css/adminstyle.css' %}"/>
+
+{% endblock  %}

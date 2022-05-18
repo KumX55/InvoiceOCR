@@ -3,6 +3,11 @@
 {% block content %}
 <head>
    <title> {% block title %}Créer Facture{% endblock %} </title>
+   <meta charset="utf-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+   <link rel="stylesheet" href="{% static 'app/facture/Fstyle.css'%}">
+   <link href='https://fonts.googleapis.com/css?family=Roboto:400,100,300,700' rel='stylesheet' type='text/css'>
 </head>
 <div class="container-fluid">
     <div class="row">
@@ -17,7 +22,7 @@
                         <p>Facture :</p>
                         <label>Nom : <input type="text" class="form-control mt-2" style="width: 400px;" name="name"/> </label>
                         <label>Référence :<input type="text" class="form-control mt-2" style="width: 400px;" name="ref_fac" /> </label>
-                        <p> <label>Date : <input type="text" class="form-control mt-2" style="width: 400px;" name="date" /> </label>
+                        <p> <label>Date : <input type="date" class="form-control mt-2" style="width: 400px;" name="date" /> </label>
                         <label>TTC :<input type="text" class="form-control mt-2" style="width: 400px;" name="total"  /> </label></p>
                         <label>Status :
                         <select class="form-control" name="status" style="width: 400px;" aria-label="Default select example">

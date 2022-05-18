@@ -6,16 +6,19 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
-    <link rel="stylesheet" href="{% static 'app/facture/style.css'%}">
+    <link rel="stylesheet" href="{% static 'app/facture/Fstyle.css'%}">
     <link href='https://fonts.googleapis.com/css?family=Roboto:400,100,300,700' rel='stylesheet' type='text/css'>
     <style>
     .titi:hover {
       background: #f4ebff75;
       color: black;
-      } 
+      }  
     </style>
   </head>
 <div class="container">
+  <a href="{% url 'createFacture' %}" class="btn btn-primary">Ajouter Facture</a>
+  <a href="{% url 'exportAllCsv'%}" class="d-none d-sm-inline-block btn btn-sm btn-warning shadow-sm float-right"><i class="fas fa-download fa-sm text-white-50"></i> Exporter CSV</a>
+  <hr>
     {% if factures.count %}
       <form action="" class="pb-3 w-100">
         <input type="text" class="form-control" id="searchField" placeholder="Rechercher"/>
@@ -30,6 +33,7 @@
                 <table class="table table-responsive-xl">
                    <thead>
                       <tr>
+                        <th></th>
                         <th>Name</th>
                         <th>Date</th>
                         <th></th>
@@ -38,6 +42,9 @@
                     <tbody>
                       {% for f in page_obj %} 
                         <tr class="alert titi clickable-row" role="alert" style="cursor: pointer;" data-href="{% url 'show' f.id %}">
+                          <td>
+                            <i class="fas fa-file-alt text-black"></i>
+                          </td>
                           <td>{{f.name}}</td>
                           <td>{{f.creation_date}}</td>
                           <td><a href="#" class="btn btn-light btn-icon-split">
@@ -69,6 +76,48 @@
               </div>
             </div>
     {% endif %}
+    <div class="container">
+      <p class="no-results" style="display: none;">No results found</p>
+    </div>
+    <div class="container">
+      <div class="table-output">
+        <div class="card shadow mb-4">
+          <div class="card-header py-3">
+              <h6 class="m-0 font-weight-bold text-primary">Les Résultats</h6>
+              <a href="#" class="btn btn-danger float-right" data-toggle="modal" data-target="#delfacomModal">Supprimer tous les factures</a>
+          </div>
+          <div class="card-body">
+              <table class="table table-responsive-xl">
+                <thead>
+                  <tr>
+                      <th>Name</th>
+                      <th>Date</th>
+                  </tr>
+                </thead>
+                <tbody class="table-body">
+
+                </tbody>
+              </table>
+              <div class="pagination-container">
+              <div class="">
+                Page {{page_obj.number}} sur {{page_obj.paginator.num_pages}}
+              </div>
+              <ul class="pagination align-right float-right mr-auto">
+                  {% if page_obj.has_previous %}
+                  <li {% if page_obj.number == 1 %} class="page-item active" {% endif %}><a class="page-link" href="?page=1">&laquo; 1</a></li>
+                  <li class="page-item"> <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a></li>
+                  {% endif %}
+              
+                  {% if page_obj.has_next %}
+                  <li class="page-item"> <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a></li>
+                  <li class="page-item"> <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">{{ page_obj.paginator.num_pages}} &raquo;</a></li>
+                  {% endif %}
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+     </div>
 </div>
 <form action="{% url 'deleteAll'%}" method="post">
     {% csrf_token %} 

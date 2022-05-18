@@ -33,8 +33,8 @@
     <li class="nav-item">
         <a class="nav-link collapsed" href="{% url 'home'%}" data-target="#collapseTwo"
             aria-expanded="true" aria-controls="collapseTwo">
-            <i class="fas fa-fw fa-cog"></i>
-            <span>Import-Vue</span>
+            <i class="bi bi-cloud-arrow-up-fill"></i>
+            <span>Import</span>
         </a>
         <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
@@ -47,7 +47,7 @@
     <li class="nav-item">
         <a class="nav-link collapsed" href="{% url 'createFacture'%}" data-target="#collapseTwo"
             aria-expanded="true" aria-controls="collapseTwo">
-            <i class="fas fa-fw fa-cog"></i>
+            <i class="bi bi-plus-circle-fill"></i>
             <span>Créer Facture</span>
         </a>
 
@@ -55,7 +55,7 @@
     <li class="nav-item">
         <a class="nav-link collapsed" href="{% url 'historique' %}" data-target="#collapseUtilities"
             aria-expanded="true" aria-controls="collapseUtilities">
-            <i class="fas fa-fw fa-wrench"></i>
+            <i class="bi bi-clock-history"></i>
             <span>Historique</span>
         </a>
         <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
@@ -78,7 +78,7 @@
     <li class="nav-item">
         <a class="nav-link collapsed" href="{% url 'fourlist' %}" data-target="#collapsePages"
             aria-expanded="true" aria-controls="collapsePages">
-            <i class="fas fa-fw fa-folder"></i>
+            <i class="bi bi-person-lines-fill"></i>
             <span>Liste des Fournisseurs</span>
         </a> </li>
         {% comment %} <li class="nav-item">
@@ -96,7 +96,7 @@
     <li class="nav-item">
         <a class="nav-link collapsed" href="{% url 'clilist' %}" data-target="#collapsePages"
             aria-expanded="true" aria-controls="collapsePages">
-            <i class="fas fa-fw fa-folder"></i>
+            <i class="bi bi-person-lines-fill"></i>
             <span>Liste des Clients</span>
         </a> </li>
         {% comment %} <li class="nav-item">
@@ -114,7 +114,7 @@
     <li class="nav-item">
         <a class="nav-link collapsed" href="{% url 'AllProd' %}" data-target="#collapsePages"
            aria-expanded="true" aria-controls="collapsePages">
-            <i class="fas fa-fw fa-folder"></i>
+           <i class="bi bi-cart4"></i>
             <span>Liste des Produits</span>
         </a> </li>
     <!-- Divider -->
@@ -129,7 +129,7 @@
     <li class="nav-item">
         <a class="nav-link collapsed" href="{% url 'profile' %}" data-target="#collapsePages"
             aria-expanded="true" aria-controls="collapsePages">
-            <i class="fas fa-fw fa-folder"></i>
+            <i class="bi bi-file-person-fill"></i>
             <span>Profile</span>
         </a>
         <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
@@ -146,7 +146,7 @@
         </div>
     </li>
 
-    <!-- Nav Item - Charts -->
+    {% comment %} <!-- Nav Item - Charts -->
     <li class="nav-item">
         <a class="nav-link" href="charts.html">
             <i class="fas fa-fw fa-chart-area"></i>
@@ -158,7 +158,7 @@
         <a class="nav-link" href="tables.html">
             <i class="fas fa-fw fa-table"></i>
             <span>Element 3</span></a>
-    </li>
+    </li> {% endcomment %}
 
     <!-- Divider -->
     <hr class="sidebar-divider d-none d-md-block">

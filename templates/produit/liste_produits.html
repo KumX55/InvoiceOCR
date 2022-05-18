@@ -3,14 +3,26 @@
 {% block content %}
 <head>
   <title>{% block title %}Produits{% endblock %}</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+  <link rel="stylesheet" href="{% static 'app/facture/Fstyle.css'%}">
+  <link href='https://fonts.googleapis.com/css?family=Roboto:400,100,300,700' rel='stylesheet' type='text/css'>
+  <style>
+    .titi:hover {
+      background: #f4ebff75;
+      color: black;
+      } 
+    </style>
 </head>
 <div class="container">
-    <a href="{% url 'AjoutProduit' %}" class="btn btn-primary">Ajouter Produit</a>
+    <a href="{% url 'AjoutProduit' %}" class="btn btn-primary"><i class="bi bi-plus-circle-fill"></i> Ajouter Produit</a>
+    <a href=" {% url 'exportAllProdCsv'%}" class="d-none d-sm-inline-block btn btn-sm btn-warning shadow-sm float-right"><i class="fas fa-download fa-sm text-white-50"></i> Exporter CSV</a>
   <hr>
-    <div class="row">
+    {% comment %} <div class="row">
       {% for p in produits %}
         <div class="col lg-2">
-          <div class="card">
+          <div class="card mt-2" style="width: 300px !important;">
               <a href="{% url 'showProd' p.id %}">
                 <!-- THIS DIV IS NOT CLICKABLE BUT I WANT IT TO BE -->
                 <div class="card-body">
@@ -21,6 +33,76 @@
             </div><!-- END CARD -->
         </div>
       {% endfor %}
-    </div>
+    </div> {% endcomment %}
 </div>
+<div class="container">
+  {% if produits.count %}
+    <form action="" class="pb-3 w-100">
+      <input type="text" class="form-control" id="searchField" placeholder="Rechercher"/>
+    </form>
+      <div class="factures-table">
+        <div class="card shadow mb-4">
+          <div class="card-header py-3">
+              <h6 class="m-0 font-weight-bold text-primary">Les Produits</h6>
+              {% comment %} <a href="#" class="btn btn-danger float-right" data-toggle="modal" data-target="#delfacomModal">Supprimer tous les factures</a> {% endcomment %}
+          </div>
+          <div class="card-body">
+              <table class="table table-responsive-xl">
+                 <thead>
+                    <tr>
+                      <th></th>
+                      <th>Nom</th>
+                      <th>Prix Unitaire Hors Taxe</th>
+                      <th>Quantité</th>
+                      <th>TVA</th>
+                      <th>Montant</th>
+                      <th></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for p in page_obj %} 
+                      <tr class="alert titi clickable-row" role="alert" style="cursor: pointer;" data-href="{% url 'showProd' p.id %}">
+                        <td><i class="fas fa-donate text-success"></i></td>
+                        <td>{{p.name}}</td>
+                        <td>{{p.prix_u_ht}}</td>
+                        <td>{{p.qty}}</td>
+                        <td>{{p.tva}}</td>
+                        <td>{{p.montant}}</td>
+                        <td><a href="{% url 'showProd' p.id %}" class="btn btn-light btn-icon-split">
+                          <span class="icon text-gray-50">
+                              <i class="fas fa-arrow-right"></i>
+                          </span>
+                        </a></td>
+                      </tr>
+                    {% endfor %}
+                  </tbody>
+               </table>
+                <div class="pagination-container">
+                  {% comment %} <a href="{% url 'exportAllCsv'%}" class="btn btn-warning float-right">CSV</a> {% endcomment %}
+                  <div class="">
+                    Page {{page_obj.number}} sur {{page_obj.paginator.num_pages}}
+                  </div>
+                  <ul class="pagination align-right float-right mr-auto">
+                    {% if page_obj.has_previous %}
+                      <li {% if page_obj.number == 1 %} class="page-item active" {% endif %}><a class="page-link" href="?page=1">&laquo; 1</a></li>
+                      <li class="page-item"> <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Pécédent</a></li>
+                      {% endif %}
+                  
+                      {% if page_obj.has_next %}
+                      <li class="page-item"> <a class="page-link" href="?page={{ page_obj.next_page_number }}">Suivant</a></li>
+                      <li class="page-item"> <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">{{ page_obj.paginator.num_pages}} &raquo;</a></li>
+                    {% endif %}
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+  {% endif %}
+  <script>
+    jQuery(document).ready(function($) {
+      $(".clickable-row").click(function() {
+          window.location = $(this).data("href");
+      });
+  });
+  </script>
 {% endblock %} 
