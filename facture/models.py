@@ -57,10 +57,10 @@ class Facture(models.Model):
 class Produit(models.Model):
     creation_date = models.DateField(default=now)
     name = models.CharField(max_length=255, null=True)
-    prix_u_ht = models.IntegerField(null=True)
-    qty = models.IntegerField(null=True)
+    prix_u_ht = models.CharField(max_length=255, null=True)
+    qty = models.CharField(max_length=255, null=True)
     tva = models.CharField(max_length=255, null=True)
-    montant = models.IntegerField(null=True)
+    montant = models.CharField(max_length=255, null=True)
     facture = models.ManyToManyField(Facture)
     owner = models.ForeignKey(to=User, null=True,on_delete=models.CASCADE)
     def __str__(self):

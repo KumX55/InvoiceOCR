@@ -27,6 +27,11 @@ import re
 # ****************************************************************************************************************** #
     # **************************************Factures********************************************** #
                     # *********************************************************************** #
+def clean(prida):
+    for key in prida:
+        if not prida[key]:
+            prida[key].append(None)
+    return prida
 def search_factures(request):
     if request.method == 'POST':
         search_str = json.loads(request.body).get('searchText')
@@ -51,7 +56,38 @@ class upload(View):
         for f in factures:
             fac = Facture.objects.create(files=f,name=f.name,owner=request.user) 
             fac.save()
-        return render(request,'facture/upload.html')
+            predictionsa = prediction('./media/'+f.name)
+            predictions = clean(predictionsa)
+            #*************************** OCR ***************************************#
+            fac.ref_fac = predictions['IREF'][0]
+            fac.date = predictions['IDATE'][0]
+            fac.total = predictions['ITOTAL'][0]
+            if predictions['ISTATUS'][0] != None:
+                fac.status = predictions['ISTATUS'][0]
+            else:
+                pass
+            fac.save()
+            if predictions['CNAME'][0] != None:
+                c = Client.objects.create(name=predictions['CNAME'][0],adress=predictions['CADD'][0],email=predictions['CMAIL'][0],phone=predictions['CPHONE'][0],owner=request.user)
+                c.save()
+                fac.client = c
+                fac.save()
+            if predictions['FNAME'][0] !=None:
+                four = Fournisseur.objects.create(name=predictions['FNAME'][0],adress=predictions['FADD'][0],email=predictions['FMAIL'][0],phone=predictions['FPHONE'][0],owner=request.user)
+                four.save()
+                fac.fournisseur = four
+                fac.save()
+            if predictions['PNAME'][0] != None:
+                i = 0
+                for produit in predictions['PNAME']:
+                    p = Produit.objects.create(name=produit,prix_u_ht=predictions['PPUHT'][i],qty=predictions['PQTY'][i],tva=predictions['PTVA'][i],montant=predictions['PTTC'][i],owner=request.user)
+                    p.save()
+                    fac.produit_set.add(p)
+                    fac.save()
+                    i += 1
+            fac.save()
+            #*************************** /OCR/ ************************************#
+        return redirect('home')
 # **************************************Visualiser Facture********************************************** #
 class showFac(View):
     @method_decorator(login_required(login_url='/authentication/login'))
