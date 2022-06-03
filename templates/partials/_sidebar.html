@@ -56,7 +56,7 @@
         <a class="nav-link collapsed" href="{% url 'historique' %}" data-target="#collapseUtilities"
             aria-expanded="true" aria-controls="collapseUtilities">
             <i class="bi bi-clock-history"></i>
-            <span>Historique</span>
+            <span>Liste des factures</span>
         </a>
         <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
             data-parent="#accordionSidebar">
@@ -118,7 +118,7 @@
             <span>Liste des Produits</span>
         </a> </li>
     <!-- Divider -->
-    <hr class="sidebar-divider"> 
+    {% comment %} <hr class="sidebar-divider"> 
 
     <!-- Heading -->
     <div class="sidebar-heading">
@@ -130,8 +130,8 @@
         <a class="nav-link collapsed" href="{% url 'profile' %}" data-target="#collapsePages"
             aria-expanded="true" aria-controls="collapsePages">
             <i class="bi bi-file-person-fill"></i>
-            <span>Profile</span>
-        </a>
+            <span>Profil</span>
+        </a> {% endcomment %}
         <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">Login Screens:</h6>

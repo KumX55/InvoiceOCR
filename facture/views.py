@@ -56,7 +56,7 @@ class upload(View):
         for f in factures:
             fac = Facture.objects.create(files=f,name=f.name,owner=request.user) 
             fac.save()
-            predictionsa = prediction('./media/'+f.name)
+            predictionsa = prediction('./media/'+str(fac.files))
             predictions = clean(predictionsa)
             #*************************** OCR ***************************************#
             fac.ref_fac = predictions['IREF'][0]

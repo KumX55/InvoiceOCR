@@ -31,23 +31,29 @@
                     </div>
                     </div>
                 </div>
-                <div class="card-body mt-3 mb-2">
-                    <div class="row">
-                        <div class="col">
-                            <div class="d-flex justify-content-end">Nom : </div>  
-                            <div class="d-flex justify-content-end">Prix Unitaire Hors Taxe : </div>
-                            <div class="d-flex justify-content-end">Quantité : </div>
-                            <div class="d-flex justify-content-end">TVA : </div>
-                            <div class="d-flex justify-content-end">Montant : </div>
-                        </div>
-                        <div class="col"> 
-                            <div class="d-flex justify-content-start">{{ produit.name }}</div>
-                            <div class="d-flex justify-content-start">{{ produit.prix_u_ht }}</div>
-                            <div class="d-flex justify-content-start">{{ produit.qty }}</div>
-                            <div class="d-flex justify-content-start">{{ produit.tva }}</div>
-                            <div class="d-flex justify-content-start">{{ produit.montant }}</div>
-                        </div>
-                        </div>
+                <div class="card-body mt-3 mb-2 d-flex justify-content-center">
+                <table>
+                    <tr>
+                        <td><div class="d-flex justify-content-end">Nom : </div> </td>
+                        <td><div class="d-flex justify-content-start">{{ produit.name }}</div></td>
+                    </tr>
+                    <tr>
+                        <td><div class="d-flex justify-content-end">Prix Unitaire Hors Taxe : </div></td>
+                        <td><div class="d-flex justify-content-start">{{ produit.prix_u_ht }}</div></td>
+                    </tr>
+                    <tr>
+                        <td><div class="d-flex justify-content-end">Quantité : </div></td>
+                        <td><div class="d-flex justify-content-start">{{ produit.qty }}</div></td>
+                    </tr>
+                    <tr>
+                        <td><div class="d-flex justify-content-end">TVA : </div></td>
+                        <td><div class="d-flex justify-content-start">{{ produit.tva }}</div></td>
+                    </tr>
+                    <tr>
+                        <td><div class="d-flex justify-content-end">Montant : </div></td>
+                        <td><div class="d-flex justify-content-start">{{ produit.montant }}</div></td>
+                    </tr>
+                </table>
                 </div>
             </div>
         </div>

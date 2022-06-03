@@ -17,7 +17,9 @@
 </head>
 <div class="container">
   <a href="{% url 'createCli' %}" class="btn btn-primary"><i class="bi bi-plus-circle-fill"></i> Ajouter Client</a>
+  {% if clients.count %}
   <a href=" {% url 'exportAllCliCsv'%}" class="d-none d-sm-inline-block btn btn-sm btn-warning shadow-sm float-right"><i class="fas fa-download fa-sm text-white-50"></i> Exporter CSV</a>
+  {% endif %}
   <hr>
     {% comment %} <div class="row">
       {% for c in clients %}

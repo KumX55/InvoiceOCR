@@ -24,17 +24,16 @@
           </div>
           <div class="card-body">
               <object
-                data="http://127.0.0.1:8000/app/media/ext_mod_A.pdf"
+                data="http://127.0.0.1:8000/app/media/{{facture.files}}"
                 type="application/pdf"
                 width="500"
                 height="680"
               >
-                <iframe
-                  src="http://127.0.0.1:8000/app/media/ext_mod_A.pdf"
+                <img
+                  src="http://127.0.0.1:8000/app/media/{{facture.files}}"
                   width="500"
                   height="680"
-                >
-                </iframe>
+                />
               </object>
           </div>
       </div>
@@ -58,7 +57,7 @@
         <form action="{% url 'show' facture.id %}" method="post" class="form-group py-3 mb-3 ">
           {% csrf_token %}
           <label>Référence : <input type="text" name="ref_fac" class="form-control" value="{{facture.ref_fac}}"></label>
-          <label>Date : <input type="date" name="date" class="form-control" value="{{facture.date}}"></label>
+          <label>Date : <input type="text" name="date" class="form-control" value="{{facture.date}}"></label>
           <label>Total : <input type="text" name="total" class="form-control" value="{{facture.total}}"></label>
           <p><label>Produit : <input type="text"  class="form-control" value="Produits" disabled/></label> <label> <a href="{% url 'showLprod' facture.id %}" class="btn btn-info"><i class="fas fa-arrow-right"></i></a></label>
             {% if p_select.count %}

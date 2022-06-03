@@ -16,8 +16,10 @@
     </style>
   </head>
 <div class="container">
-  <a href="{% url 'createFacture' %}" class="btn btn-primary">Ajouter Facture</a>
+  <a href="{% url 'createFacture' %}" class="btn btn-primary"><i class="bi bi-plus-circle-fill"></i> Ajouter Facture</a>
+  {% if factures.count %}
   <a href="{% url 'exportAllCsv'%}" class="d-none d-sm-inline-block btn btn-sm btn-warning shadow-sm float-right"><i class="fas fa-download fa-sm text-white-50"></i> Exporter CSV</a>
+  {% endif %}
   <hr>
     {% if factures.count %}
       <form action="" class="pb-3 w-100">

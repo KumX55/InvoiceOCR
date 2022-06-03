@@ -85,7 +85,7 @@ class RegistrationView(View):
                 mail = EmailMessage(
                     email_subject,
                     email_body,
-                    'noreply@semycolon.com',
+                    "RecFac",
                     [email],
                 )
                 mail.send(fail_silently=False)
@@ -127,8 +127,11 @@ class LoginView(View):
                 if user.is_active:
                     auth.login(request,user)
                     messages.success(request,'Bienvenue '+user.username+ ' Vous êtes maintenant connecté !!')
-                    return redirect('home')
-                messages.warning(request,'Account is not active, please check you email !!')
+                    if user.is_superuser:
+                        return redirect('/admin')
+                    else:
+                        return redirect('home')
+                messages.warning(request,'Compte n`est pas activé, verifiez votre email !!')
                 return render(request,'authentication/login.html')    
             messages.warning(request,'Informations d`identification non valides, réessayez!')
             return render(request,'authentication/login.html')
