@@ -2,9 +2,26 @@
 {% load static %}
 {% block content %}
 <title> {% block title %} Show {% endblock %} </title>
+<style>
+  {% comment %} * {box-sizing: border-box;} {% endcomment %}
+  
+  .img-magnifier-container {
+    position:relative;
+  }
+  
+  .img-magnifier-glass {
+    position: absolute;
+    
+    border-radius: 50%;
+    cursor: none;
+    /*Set the size of the magnifier glass:*/
+    width: 100px;
+    height: 100px;
+  }
+  </style>
 <!-- Begin Page Content -->
 <div class="container-fluid">
-  <a href="javascript:history.go(-1);" class="btn btn-outline-primary mb-2"><i class="fas fa-arrow-left"></i></a>
+  {% comment %} <a href="javascript:history.go(-1);" class="btn btn-outline-primary mb-2"><i class="fas fa-arrow-left"></i></a> {% endcomment %}
   <div class="row">
     <div class="col-lg-6">
       <div class="card shadow mb-4">
@@ -23,7 +40,7 @@
             </div>
               </div>
           </div>
-          <div class="card-body">
+          <div class="card-body img-magnifier-container">
               <object
                 data="http://127.0.0.1:8000/app/media/{{facture.files}}"
                 type="application/pdf"
@@ -34,6 +51,7 @@
                   src="http://127.0.0.1:8000/app/media/{{facture.files}}"
                   width="500"
                   height="680"
+                  id="myimage"
                 />
               </object>
           </div>
@@ -45,8 +63,8 @@
           <h6 class="m-0 font-weight-bold text-primary">Extracter comme :</h6>
       </div>
       <div class="card-body">
-        <a href="" class="btn btn-primary">PDF</a>
-        <a href="" class="btn btn-success">EXCEL</a>
+        <a href="{% url 'exportPdf' facture.id %}" class="btn btn-primary">PDF</a>
+        <a href="{% url 'exportXls' facture.id %}" class="btn btn-success">EXCEL</a>
         <a href="{% url 'exportCsv' facture.id %}" class="btn btn-warning">CSV</a>
       </div>
     </div>
@@ -149,4 +167,5 @@
   </div>
 </div>
 </form>
+<script src="{% static 'app/facture/imagezoom.js' %}"></script>
 {% endblock %}

@@ -1,11 +1,14 @@
 from email import message
+from fileinput import filename
 import imp
+from urllib import response
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 from unicodedata import name
 from django.shortcuts import redirect, render
 from django.contrib import messages
 from django.views import View
+from matplotlib import image
 from matplotlib.pyplot import get
 from numpy import NaN
 from django.core.mail import EmailMessage
@@ -23,10 +26,18 @@ import xlwt
 from .encryption_utils import encrypt, decrypt
 from .predictions import prediction
 import re
-
+from pdf2image import convert_from_path
+from pathlib import Path
+from django.template.loader import render_to_string
+from weasyprint import HTML
+import tempfile
 # ****************************************************************************************************************** #
     # **************************************Factures********************************************** #
                     # *********************************************************************** #
+def pdf_to_jpg(path, filename):
+    image = convert_from_path(path)
+    image[0].save('./media/'+Path('./media/'+filename).stem+'.jpg','JPEG')
+
 def clean(prida):
     for key in prida:
         if not prida[key]:
@@ -56,6 +67,10 @@ class upload(View):
         for f in factures:
             fac = Facture.objects.create(files=f,name=f.name,owner=request.user) 
             fac.save()
+            if str(fac.files).endswith('.pdf'):
+                pdf_to_jpg('./media/'+str(fac.files), str(fac.files.name)) 
+                fac.files = Path('./media/'+str(fac.files.name)).stem+'.jpg'
+                fac.save()
             predictionsa = prediction('./media/'+str(fac.files))
             predictions = clean(predictionsa)
             #*************************** OCR ***************************************#
@@ -80,7 +95,23 @@ class upload(View):
             if predictions['PNAME'][0] != None:
                 i = 0
                 for produit in predictions['PNAME']:
-                    p = Produit.objects.create(name=produit,prix_u_ht=predictions['PPUHT'][i],qty=predictions['PQTY'][i],tva=predictions['PTVA'][i],montant=predictions['PTTC'][i],owner=request.user)
+                    try:
+                        PPUHT = predictions['PPUHT'][i]
+                    except:
+                        PPUHT = None
+                    try:
+                        PQTY = predictions['PQTY'][i]
+                    except:
+                        PQTY = None
+                    try:
+                        PTVA = predictions['PTVA'][i]
+                    except:
+                        PTVA = None
+                    try:
+                        PTTC = predictions['PTTC'][i]
+                    except:
+                        PTTC = None
+                    p = Produit.objects.create(name=produit,prix_u_ht=PPUHT,qty=PQTY,tva=PTVA,montant=PTTC,owner=request.user)
                     p.save()
                     fac.produit_set.add(p)
                     fac.save()
@@ -609,9 +640,9 @@ def export_facture_csv(request,id):
     return response
 # *****************************************Export Excel*************************************************** #
 def export_facture_excel(request,id):
-    facture = Facture.objects.get(pk=id, owner=request.user)
+    facture = Facture.objects.filter(pk=id, owner=request.user)
     response = HttpResponse(content_type='application/ms-excel')
-    response['Content-Disposition'] = 'attachment; filename=Facture'+facture.name+'_'+facture.creation_date+'.xls'
+    response['Content-Disposition'] = 'attachment; filename=Facture'+facture[0].name+'_'+str(facture[0].creation_date)+'.xls'
 
     wb = xlwt.Workbook(encoding='utf-8')
     ws = wb.add_sheet('Facture')
@@ -622,13 +653,20 @@ def export_facture_excel(request,id):
     columns = ['Nom', 'Référence', 'Date', 'Total', 'Status', 
                'Nom Fournisseur','Addresse Fournisseur','Email Fournisseur','Tel Fournisseur',
                'Nom Client','Addresse Client','Email Client','Tel Client',
-               'Nom Produit','Prix Unitaire Hors Taxe','Quantité','TVA','Montant',]
+               'Nom Produit','Prix Unitaire Hors Taxe','Quantité','TVA','Montant']
     
     for  col_num in range(len(columns)):
-        ws.wrtie(row_num, col_num, columns[col_num], font_style)
+        ws.write(row_num, col_num, columns[col_num], font_style)
 
-    rows = facture.values_list()
+    rows = facture.values_list('name','ref_fac','date','total','status')
 
+    for row in rows:
+        row_num+=1
+
+        for col_num in range(len(row)):
+            ws.write(row_num,col_num,str(row[col_num]), font_style)
+    wb.save(response)
+    
     return response
 
 
@@ -699,4 +737,26 @@ def export_produits_csv(request):
     
     for produit in produits:
                 writer.writerow([produit.name, produit.prix_u_ht, produit.qty, produit.tva, produit.montant])
+    return response
+#***********************************************PDF************************************#
+def export_facture_pdf(request, id):
+    facture = Facture.objects.get(pk=id, owner=request.user)
+    produits = facture.produit_set.all()
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = 'inline; attatchment: filename=Facture'+str(facture.name)+'.pdf'
+    response['Content-Transfer-Encoding'] = 'binary'
+
+
+    html_string = render_to_string('facture/pdf-output.html',{'facture':facture, 'produits':produits})
+    html = HTML(string=html_string)
+
+    result = html.write_pdf()
+
+    with tempfile.NamedTemporaryFile(delete=True) as output:
+        output.write(result)
+        output.flush()
+
+        output=open(output.name,'rb')
+        response.write(output.read())
+    
     return response

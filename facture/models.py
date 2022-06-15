@@ -47,7 +47,7 @@ class Facture(models.Model):
     ref_fac = models.CharField(max_length=255, null=True)
     date = models.CharField(max_length=255, null=True)
     total = models.CharField(max_length=255, null=True)
-    status = models.CharField(max_length=1, null=True, choices=FACTURE_STATUS, default='P')
+    status = models.CharField(max_length=255, null=True, choices=FACTURE_STATUS, default='P')
     fournisseur = models.ForeignKey(to=Fournisseur, null=True, on_delete=models.CASCADE)
     client = models.ForeignKey(to=Client, null=True, on_delete=models.CASCADE)
     class Meta:

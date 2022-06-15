@@ -1,0 +1,87 @@
+<head>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <style>
+        div{
+            font-family: sans-serif !important;
+        }
+    </style>
+</head>
+<div class="container">
+    <div class="">
+  <div class="header">
+  Facture
+  <strong> {{facture.ref_fac}} </strong> 
+    <span class="d-flex justify-content-end"> <strong>Date de facturation:</strong> {{facture.date}} </span>
+  </div>
+  <hr>
+  <div class="body">
+  <div class="row mb-4">
+    {% if facture.fournisseur %}
+    <div class="col-sm-6">
+        <div>
+        <strong>{{facture.fournisseur.name}}</strong>
+        </div> 
+        <div>{{facture.fournisseur.adress}}</div>
+        <div>Email: {{facture.fournisseur.email}}</div>
+        <div>Phone: {{facture.fournisseur.phone}}</div>
+        </div>
+    {% endif %}
+  
+{% if facture.client %}
+<div class="col-sm-6">
+    <div>
+    <strong>{{facture.client.name}}</strong>
+    </div>
+    <div>{{facture.client.adress}}</div>
+    <div>Email: {{facture.client.email}}</div>
+    <div>Phone: {{facture.client.phone}}</div>
+    </div>
+{% endif %}
+  </div>
+  <div class="table-responsive-sm">
+  <table class="table table-striped">
+  <thead>
+  <tr>
+  <th class="center"></th>
+  <th>Description</th>
+  <th class="right">Prix Unitaire</th>
+    <th class="center">Quantité</th>
+    <th class="center">Taxes</th>
+  <th class="right">Prix Total</th>
+  </tr>
+  </thead>
+  <tbody>
+    {% for produit in produits %}
+    <tr>
+        <td class="center"></td>
+        <td class="left strong">{{produit.name}}</td>
+        <td class="left">{{produit.prix_u_ht}} DT</td>
+        
+        <td class="right">{{produit.qty}}</td>
+          <td class="center">{{produit.tva}}</td>
+        <td class="right">{{produit.montant}} DT</td>
+        </tr>
+    {% endfor %}
+  </tbody>
+</table>
+</div>
+<div class="row">
+<div class="col-lg-4 col-sm-5">
+
+</div>
+
+<div class="col-lg-4 col-sm-5 ml-auto">
+<table class="table table-clear">
+<tbody>
+<tr>
+<td class="d-flex justify-content-end"> <strong class="mx-2">Total  </strong> {{facture.total}} DT</td>
+</tr>
+</tbody>
+  </table>
+  <hr>
+<p style="font-size: 70% !important;"> Merci d'utiliser la communication suivante pour votre paiement <strong>{{facture.ref_fac}}</strong></p>
+  </div>
+  </div>
+  </div>
+  </div>
+  </div>

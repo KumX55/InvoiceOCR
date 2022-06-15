@@ -76,13 +76,13 @@
                                           </div>
                                           <div class="card-body">
                                               <object
-                                                data="http://127.0.0.1:8000/app/media/ext_mod_A.pdf"
+                                                data="http://127.0.0.1:8000/app/media/{{f.files}}"
                                                 type="application/pdf"
                                                 width="500"
                                                 height="680"
                                               >
-                                                <iframe
-                                                  src="http://127.0.0.1:8000/app/media/ext_mod_A.pdf"
+                                                <img
+                                                  src="http://127.0.0.1:8000/app/media/{{f.files}}"
                                                   width="500"
                                                   height="680"
                                                 >
@@ -97,9 +97,9 @@
                                           <h6 class="m-0 font-weight-bold text-primary">Extracter comme :</h6>
                                       </div>
                                       <div class="card-body">
-                                        <a href="" class="btn btn-primary">PDF</a>
-                                        <a href="" class="btn btn-success">EXCEL</a>
-                                        <a href="" class="btn btn-warning">CSV</a>
+                                        <a href="{% url 'exportPdf' f.id %}" class="btn btn-primary">PDF</a>
+                                        <a href="{% url 'exportXls' f.id %}" class="btn btn-success">EXCEL</a>
+                                        <a href="{% url 'exportCsv' f.id %}" class="btn btn-warning">CSV</a>
                                       </div>
                                     </div>
                                     <div class="card shadow">
