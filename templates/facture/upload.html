@@ -226,7 +226,7 @@
                </div>
                <div class="container">
                 <div class="wrapper mt-5">
-                    <form action="{% url 'home'%}" class="form-group upload-form" method="POST" style="cursor: pointer;" enctype="multipart/form-data">
+                    <form action="{% url 'home'%}" class="form-group upload-form" onsubmit="Spinner()" method="POST" style="cursor: pointer;" enctype="multipart/form-data">
                       {% csrf_token %}
                       <input class="file-input" type="file" name="factures" multiple hidden/>
                       <img class="jss301" src="https://cdn.nanonets.com/media/invoice.svg" alt="">
@@ -237,6 +237,19 @@
                     <section class="uploaded-area"></section>
                 </div>
               </div>
+              <div class="d-flex justify-content-center"></div>
+              <table class="d-flex justify-content-center text-success">
+                <tbody>
+                  <tr>
+                    <td><div class="spinner-border mx-auto" role="status" id="spinner" style="display: none;"></div> </td>
+                  </tr>
+                  <tr>
+                    <td><span  id="spinnerText" style="display: none;">Chargement en cours...</span></td>
+                  </tr>
+                </tbody>
+              </table>
+              </div>
+
 </div>
 <form action="{% url 'deleteToday'%}" method="post">
   {% csrf_token %} 
@@ -268,5 +281,13 @@
   //         window.location = $(this).data("href");
   //     });
   // });
+</script>
+<script>
+  function Spinner(){
+    text = document.getElementById('spinnerText')
+    spinner = document.getElementById('spinner')
+    spinner.style.display = "block"
+    text.style.display = "block"
+  }
 </script>
 {% endblock %}

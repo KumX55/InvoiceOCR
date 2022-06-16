@@ -4,6 +4,8 @@
 from django.db import models
 from django.utils.timezone import now
 from django.contrib.auth.models import User
+from django.dispatch import receiver
+import os
 # from django.contrib.auth.models import User
 # Create your models here.
 
@@ -52,7 +54,27 @@ class Facture(models.Model):
     client = models.ForeignKey(to=Client, null=True, on_delete=models.CASCADE)
     class Meta:
         ordering = ['-pk']
+    
+@receiver(models.signals.post_delete, sender=Facture)
+def auto_delete_file_on_delete(sender, instance, **kwargs):
+    if instance.files:
+        if os.path.isfile(instance.files.path):
+            os.remove(instance.files.path)
 
+@receiver(models.signals.pre_save, sender=Facture)
+def auto_delete_file_on_change(sender, instance, **kwargs):
+    if not instance.pk:
+        return False
+
+    try:
+        old_file = Facture.objects.get(pk=instance.pk).files
+    except Facture.DoesNotExist:
+        return False
+
+    new_file = instance.files
+    if not old_file == new_file:
+        if os.path.isfile(old_file.path):
+            os.remove(old_file.path)
 # **************************************Produit********************************************** #
 class Produit(models.Model):
     creation_date = models.DateField(default=now)

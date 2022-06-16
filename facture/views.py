@@ -74,49 +74,49 @@ class upload(View):
             predictionsa = prediction('./media/'+str(fac.files))
             predictions = clean(predictionsa)
             #*************************** OCR ***************************************#
-            fac.ref_fac = predictions['IREF'][0]
-            fac.date = predictions['IDATE'][0]
-            fac.total = predictions['ITOTAL'][0]
-            if predictions['ISTATUS'][0] != None:
-                fac.status = predictions['ISTATUS'][0]
-            else:
-                pass
-            fac.save()
-            if predictions['CNAME'][0] != None:
-                c = Client.objects.create(name=predictions['CNAME'][0],adress=predictions['CADD'][0],email=predictions['CMAIL'][0],phone=predictions['CPHONE'][0],owner=request.user)
-                c.save()
-                fac.client = c
-                fac.save()
-            if predictions['FNAME'][0] !=None:
-                four = Fournisseur.objects.create(name=predictions['FNAME'][0],adress=predictions['FADD'][0],email=predictions['FMAIL'][0],phone=predictions['FPHONE'][0],owner=request.user)
-                four.save()
-                fac.fournisseur = four
-                fac.save()
-            if predictions['PNAME'][0] != None:
-                i = 0
-                for produit in predictions['PNAME']:
-                    try:
-                        PPUHT = predictions['PPUHT'][i]
-                    except:
-                        PPUHT = None
-                    try:
-                        PQTY = predictions['PQTY'][i]
-                    except:
-                        PQTY = None
-                    try:
-                        PTVA = predictions['PTVA'][i]
-                    except:
-                        PTVA = None
-                    try:
-                        PTTC = predictions['PTTC'][i]
-                    except:
-                        PTTC = None
-                    p = Produit.objects.create(name=produit,prix_u_ht=PPUHT,qty=PQTY,tva=PTVA,montant=PTTC,owner=request.user)
-                    p.save()
-                    fac.produit_set.add(p)
-                    fac.save()
-                    i += 1
-            fac.save()
+            # fac.ref_fac = predictions['IREF'][0]
+            # fac.date = predictions['IDATE'][0]
+            # fac.total = predictions['ITOTAL'][0]
+            # if predictions['ISTATUS'][0] != None:
+            #     fac.status = predictions['ISTATUS'][0]
+            # else:
+            #     pass
+            # fac.save()
+            # if predictions['CNAME'][0] != None:
+            #     c = Client.objects.create(name=predictions['CNAME'][0],adress=predictions['CADD'][0],email=predictions['CMAIL'][0],phone=predictions['CPHONE'][0],owner=request.user)
+            #     c.save()
+            #     fac.client = c
+            #     fac.save()
+            # if predictions['FNAME'][0] !=None:
+            #     four = Fournisseur.objects.create(name=predictions['FNAME'][0],adress=predictions['FADD'][0],email=predictions['FMAIL'][0],phone=predictions['FPHONE'][0],owner=request.user)
+            #     four.save()
+            #     fac.fournisseur = four
+            #     fac.save()
+            # if predictions['PNAME'][0] != None:
+            #     i = 0
+            #     for produit in predictions['PNAME']:
+            #         try:
+            #             PPUHT = predictions['PPUHT'][i]
+            #         except:
+            #             PPUHT = None
+            #         try:
+            #             PQTY = predictions['PQTY'][i]
+            #         except:
+            #             PQTY = None
+            #         try:
+            #             PTVA = predictions['PTVA'][i]
+            #         except:
+            #             PTVA = None
+            #         try:
+            #             PTTC = predictions['PTTC'][i]
+            #         except:
+            #             PTTC = None
+            #         p = Produit.objects.create(name=produit,prix_u_ht=PPUHT,qty=PQTY,tva=PTVA,montant=PTTC,owner=request.user)
+            #         p.save()
+            #         fac.produit_set.add(p)
+            #         fac.save()
+            #         i += 1
+            # fac.save()
             #*************************** /OCR/ ************************************#
         return redirect('home')
 # **************************************Visualiser Facture********************************************** #
