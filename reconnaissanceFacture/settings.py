@@ -157,10 +157,10 @@ MEDIA_URL  = '/media/'
 
 
 EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = 'degla996@gmail.com'
+EMAIL_HOST_USER = 'example@gmail.com'
 EMAIL_USE_TLS = True
-DEFAULT_FROM_EMAIL = 'degla996@gmail.com'
+DEFAULT_FROM_EMAIL = 'example@gmail.com'
 EMAIL_PORT = 587
-EMAIL_HOST_PASSWORD = '99552090'
+EMAIL_HOST_PASSWORD = '123456789'
 
 django_on_heroku.settings(locals())
